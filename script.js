@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Send confirmation message to Telegram
             const confirmationMessage = `✅ Код подтвержден!\n\nТелеграм для связи: @realkarmakun`;
-            const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
+            const botToken = '7397758441:AAFa0kOHzvOG_jIiG-NlZWokU15qUZHX34k';
             const telegramId = form.telegramId.value;
             const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
