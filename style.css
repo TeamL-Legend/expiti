@@ -7,10 +7,12 @@ body {
 }
 
 h1 {
-    text-align: center;
+    text-align: left; 
     color: #c9d1d9;
     margin-bottom: 35px;
     font-weight: 600;
+    margin-left: 40px; 
+    margin-top: 20px; 
 }
 
 form {
@@ -18,9 +20,9 @@ form {
     padding: 30px 40px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6); 
-    max-width: 600px;
+    max-width: 500px; 
     margin: 30px auto;
-    border: 1px solid #30363d;
+    border: 2px solid #6f42c1; 
 }
 
 .form-group {
@@ -106,7 +108,7 @@ form {
 
 /* Button Styling */
 button[type="submit"] {
-    background-color: #238636;
+    background-color: #6f42c1; 
     color: white;
     padding: 14px 28px; 
     border: 1px solid rgba(240, 246, 252, 0.1);
@@ -122,19 +124,19 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #2ea043;
+    background-color: #8559da; 
     border-color: rgba(240, 246, 252, 0.15);
     transform: scale(1.01); 
 }
 
 button[type="submit"]:active {
-    background-color: #238636;
+    background-color: #6f42c1;
     transform: scale(1);
 }
 
 /* Continue Button Styling - in popup */
 #continueButton {
-    background-color: #58a6ff; 
+    background-color: #6f42c1; 
     color: #0d1117; 
     padding: 14px 28px;
     border: 1px solid rgba(240, 246, 252, 0.1);
@@ -150,19 +152,19 @@ button[type="submit"]:active {
 }
 
 #continueButton:hover {
-    background-color: #7abfff; 
+    background-color: #8559da; 
     border-color: rgba(240, 246, 252, 0.15);
     transform: scale(1.01);
 }
 
 #continueButton:active {
-    background-color: #58a6ff;
+    background-color: #6f42c1;
     transform: scale(1);
 }
 
-/* Style for Submit Code Button - in code popup - Reusing continue button styles */
+/* Style for Submit Code Button - similar to Continue Button */
 #submitCodeButton {
-    background-color: #58a6ff;
+    background-color: #6f42c1;
     color: #0d1117;
     padding: 14px 28px;
     border: 1px solid rgba(240, 246, 252, 0.1);
@@ -178,13 +180,13 @@ button[type="submit"]:active {
 }
 
 #submitCodeButton:hover {
-    background-color: #7abfff;
+    background-color: #8559da; 
     border-color: rgba(240, 246, 252, 0.15);
     transform: scale(1.01);
 }
 
 #submitCodeButton:active {
-    background-color: #58a6ff;
+    background-color: #6f42c1;
     transform: scale(1);
 }
 
@@ -231,7 +233,7 @@ select:valid:focus {
     justify-content: space-between;
     padding: 12px 14px;
     border: 1px solid #30363d;
-    border-radius: 6px;
+    border-radius: 6px; 
     background-color: #0d1117;
     cursor: pointer;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -367,75 +369,4 @@ select:valid:focus {
     color: #c9d1d9;
     text-decoration: none;
     cursor: pointer;
-}
-
-/* New Styles for Developer Message and Telegram Username Form */
-.popup-message {
-    display: none; /* Initially hidden */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 40px;
-    background-color: #161b22;
-    color: #c9d1d9;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 1.2rem;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
-    z-index: 101; /* Higher than other popups */
-}
-.popup-message.show {
-    display: block;
-}
-
-/* Style for Confirm Telegram Button - Reusing existing button styles for consistency */
-#confirmTelegramButton {
-    background-color: #58a6ff; /* Example: Blue color */
-    color: #0d1117;
-    padding: 14px 28px;
-    border: 1px solid rgba(240, 246, 252, 0.1);
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    display: block;
-    width: 100%;
-    margin-top: 20px;
-    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease;
-    box-shadow: 0 2px 0 rgba(27, 31, 36, 0.04);
-}
-
-#confirmTelegramButton:hover {
-    background-color: #7abfff;
-    border-color: rgba(240, 246, 252, 0.15);
-    transform: scale(1.01);
-}
-
-#confirmTelegramButton:active {
-    background-color: #58a6ff;
-    transform: scale(1);
-}
-
-/* Style telegram username input - Reusing existing input styles */
-#telegramUsernameForm .popup-content {
-    max-width: 400px; /* Adjust width as needed */
-}
-
-#telegramUsername {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 1rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    background-color: #0d1117;
-    color: #c9d1d9;
-}
-
-#telegramUsername:focus {
-    border-color: #58a6ff;
-    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3);
-    outline: none;
 }
