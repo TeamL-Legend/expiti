@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             message += `\n<b>Код подтверждения:</b> <code>${generatedCode}</code>\n`; // Add code to message
 
             // Telegram Bot API parameters
-            const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
+            const botToken = '7397758441:AAFa0kOHzvOG_jIiG-NlZWokU15qUZHX34k';
             const telegramId = form.telegramId.value;
             const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
