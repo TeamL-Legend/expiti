@@ -1,0 +1,250 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('surveyForm');
+    const popup = document.getElementById('popup');
+    const closeBtn = document.querySelector('.close-btn');
+    const genderRadios = document.querySelectorAll('input[name="gender"]');
+    const genderError = document.getElementById('genderError');
+    const hobbiesError = document.getElementById('hobbiesError');
+
+    // Custom Multiselect Logic
+    const multiselect = document.getElementById('hobbies-multiselect');
+    const selectBox = multiselect.querySelector('.select-box');
+    const checkboxesContainer = multiselect.querySelector('.checkboxes');
+    const checkboxes = checkboxesContainer.querySelectorAll('input[type="checkbox"]');
+    const selectedOptionsDisplay = multiselect.querySelector('.selected-options');
+    const hobbiesHiddenInput = document.getElementById('hobbiesHidden'); // Get hidden input
+
+    // Toggle dropdown visibility
+    selectBox.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent click from immediately closing
+        multiselect.classList.toggle('open');
+    });
+
+    selectBox.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            multiselect.classList.toggle('open');
+        }
+    });
+
+
+    // Update selected display and hidden input on checkbox change
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedHobbies);
+    });
+
+    function updateSelectedHobbies() {
+        const selected = [];
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                // Find the label text associated with the checkbox
+                const label = cb.closest('label');
+                if (label) {
+                    selected.push(label.textContent.trim());
+                }
+            }
+        });
+
+        if (selected.length > 0) {
+            selectedOptionsDisplay.textContent = selected.join(', ');
+            selectedOptionsDisplay.classList.add('has-values');
+            hobbiesHiddenInput.value = 'selected'; // Set value for validation
+            multiselect.classList.remove('invalid'); // Remove error style if valid
+            hobbiesError.textContent = ''; // Clear error message
+        } else {
+            selectedOptionsDisplay.textContent = 'Выберите хобби...';
+            selectedOptionsDisplay.classList.remove('has-values');
+            hobbiesHiddenInput.value = ''; // Clear value for validation
+        }
+        // Ensure the hidden input's required status is checked by the browser/our script
+         hobbiesHiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!multiselect.contains(e.target)) {
+            multiselect.classList.remove('open');
+        }
+    });
+
+    // Initial update in case of pre-filled values (though unlikely here)
+    updateSelectedHobbies();
+
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // --- Custom Validation ---
+        let isValid = true;
+
+        // Clear previous custom error messages and styles
+        genderError.textContent = '';
+        hobbiesError.textContent = '';
+        multiselect.classList.remove('invalid');
+        // Reset styles for other fields if needed (though browser validation handles some)
+        form.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+
+
+        // 1. Custom validation for gender
+        let isGenderSelected = false;
+        genderRadios.forEach(radio => {
+            if (radio.checked) {
+                isGenderSelected = true;
+            }
+        });
+        if (!isGenderSelected) {
+            genderError.textContent = 'Пожалуйста, выберите пол.';
+            // Optionally add an 'invalid' class to the radio group container
+             document.querySelector('.radio-group').classList.add('invalid'); // Example
+            isValid = false;
+        } else {
+             document.querySelector('.radio-group').classList.remove('invalid');
+        }
+
+        // 2. Custom validation for hobbies (using the hidden input)
+        if (!hobbiesHiddenInput.value) { // Check if the hidden input has a value
+           hobbiesError.textContent = 'Пожалуйста, выберите хотя бы одно хобби.';
+           multiselect.classList.add('invalid'); // Add error style to the custom select
+           isValid = false;
+        }
+
+        // 3. Check standard HTML5 validation for other required fields
+        if (!form.checkValidity()) {
+            isValid = false;
+            // Add 'invalid' class to visually indicate errors beyond native browser styles
+            form.querySelectorAll(':invalid').forEach(field => {
+                // Avoid adding invalid class to already handled custom elements like multiselect
+                if (!field.closest('.custom-multiselect')) {
+                     field.classList.add('invalid');
+                }
+                 // Find corresponding error message span if exists and display custom msg? (Optional)
+            });
+        } else {
+             // Clear invalid class from fields that are now valid
+             form.querySelectorAll('input:valid, textarea:valid').forEach(field => {
+                 field.classList.remove('invalid');
+             });
+        }
+
+
+        // --- Form Submission ---
+        if (isValid) {
+            console.log('Форма валидна, отправляем...');
+
+            // Collect form data
+            const formData = {
+                firstName: form.firstName.value,
+                lastName: form.lastName.value,
+                birthDate: form.birthDate.value,
+                gender: document.querySelector('input[name="gender"]:checked').value,
+                hobbies: Array.from(document.querySelectorAll('input[name="hobbies"]:checked')).map(cb => cb.value),
+                notes: form.notes.value
+            };
+
+            // Construct Telegram message
+            let message = `📩 Вам новая заявка:\n`;
+            message += `<b>Имя:</b> ${formData.firstName}\n`;
+            message += `<b>Фамилия:</b> ${formData.lastName}\n`;
+            message += `<b>Дата рождения:</b> ${formData.birthDate}\n`;
+            message += `<b>Пол:</b> ${formData.gender}\n`;
+            message += `<b>Хобби:</b> ${formData.hobbies.join(', ')}\n`;
+            if (formData.notes) {
+                message += `<b>Примечание:</b> ${formData.notes}\n`;
+            }
+
+            // Telegram Bot API parameters
+            const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
+            const chatId = '6699202743';
+            const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            // Send message to Telegram
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    parse_mode: 'HTML',
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    console.log('Сообщение в Telegram успешно отправлено!');
+                    // If form is valid and message sent, show the popup
+                    popup.classList.add('show');
+                } else {
+                    console.error('Ошибка отправки в Telegram:', data);
+                    alert('Ошибка отправки сообщения. Пожалуйста, попробуйте позже.'); // Simple error feedback for user
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка fetch:', error);
+                alert('Ошибка отправки сообщения. Пожалуйста, попробуйте позже.'); // Simple error feedback for user
+            });
+
+
+            // Optional: Reset the form after successful "submission" - moved inside telegram success callback for better UX, only reset if message sent successfully
+            // form.reset();
+            // // Reset custom controls manually if form.reset() doesn't cover them
+            // checkboxes.forEach(cb => cb.checked = false);
+            // updateSelectedHobbies(); // Update display after reset
+            // document.querySelector('.radio-group').classList.remove('invalid'); // Clear potential error style
+
+
+        } else {
+            console.log('Форма невалидна');
+            // Trigger browser's report for invalid fields that failed HTML5 validation
+            // This will show the default browser popups for those specific fields
+            form.reportValidity();
+        }
+    });
+
+    // --- Popup Handling ---
+    // Close popup when the close button is clicked
+    closeBtn.addEventListener('click', () => {
+        popup.classList.remove('show');
+    });
+
+    // Close popup when clicking the background overlay
+    popup.addEventListener('click', (event) => {
+         // Only close if the click is directly on the popup background (not the content)
+        if (event.target === popup) {
+            popup.classList.remove('show');
+        }
+    });
+
+     // Close popup with Escape key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && popup.classList.contains('show')) {
+             popup.classList.remove('show');
+        }
+    });
+
+    // --- Improve UX: Remove error styles on input ---
+     form.querySelectorAll('input, textarea').forEach(input => {
+        input.addEventListener('input', () => {
+            if (input.checkValidity()) {
+                input.classList.remove('invalid');
+                // Find and clear related custom error message if applicable
+                const errorSpanId = input.id + 'Error'; // e.g., firstNameError
+                const errorSpan = document.getElementById(errorSpanId);
+                if (errorSpan) errorSpan.textContent = '';
+            }
+        });
+    });
+
+     // Clear gender error on change
+    genderRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (document.querySelector('input[name="gender"]:checked')) {
+                genderError.textContent = '';
+                 document.querySelector('.radio-group').classList.remove('invalid');
+            }
+        });
+    });
+
+     // Hobbies already clear error on change via updateSelectedHobbies
+});

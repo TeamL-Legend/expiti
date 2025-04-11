@@ -1,0 +1,92 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анкета</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>EXPITI</h1>
+
+    <!-- Изменено название полей "Имя" на "Логин" и "Фамилия" на "Придумай пароль" -->
+    <form id="surveyForm">
+        <div class="form-group">
+            <label for="firstName">Логин:<span class="required-star">*</span></label>
+            <input type="text" id="firstName" name="firstName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Придумай пароль:<span class="required-star">*</span></label>
+            <input type="text" id="lastName" name="lastName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="birthDate">Дата регистрации:<span class="required-star">*</span></label>
+            <input type="date" id="birthDate" name="birthDate" required>
+        </div>
+
+        <div class="form-group">
+            <label for="version">Выбор версии:<span class="required-star">*</span></label>
+            <select id="version" name="version" required>
+                <option value="" disabled selected>Выберите версию</option>
+                <option value="RML V1.0">RML V1.0</option>
+                <option value="GHOST V1.0">GHOST V1.0</option>
+                <option value="RML V2.0">RML V2.0</option>
+                <option value="FULL UNDETECT">FULL UNDETECT</option>
+            </select>
+            <span id="versionError" class="error-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Примечание:</label>
+            <textarea id="notes" name="notes" rows="4"></textarea>
+        </div>
+
+        <button type="submit">Отправить</button>
+    </form>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <h2>Успех!</h2>
+            <p>Ваша анкета отправлена.</p>
+            <button id="continueButton" type="button">Продолжить</button>
+        </div>
+    </div>
+
+    <div id="codePopup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn" id="codePopupClose">&times;</span>
+            <h2>Введите код</h2>
+            <p>Код был отправлен вам в Telegram.</p>
+            <div class="form-group">
+                <label for="code">Код:<span class="required-star">*</span></label>
+                <input type="text" id="code" name="code" required>
+                <span id="codeError" class="error-message"></span>
+            </div>
+            <button id="submitCodeButton" type="button">Подтвердить</button>
+        </div>
+    </div>
+
+    <div id="developerMessage" class="popup-message" style="display: none;">
+        В скорем времени с вами свяжется разработчик, EXPITI CLIENT
+        <button id="developerMessageOkButton" type="button">OK</button>
+    </div>
+
+    <div id="telegramUsernameForm" class="popup" style="display: none;">
+        <div class="popup-content">
+            <h2>Введите Telegram Юзернейм</h2>
+            <p>Для связи с разработчиком, пожалуйста, укажите ваш Telegram юзернейм.</p>
+            <div class="form-group">
+                <label for="telegramUsername">Telegram Юзернейм:<span class="required-star">*</span></label>
+                <input type="text" id="telegramUsername" name="telegramUsername" required>
+                <span id="telegramUsernameError" class="error-message"></span>
+            </div>
+            <button id="confirmTelegramButton" type="button">Подтвердить</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

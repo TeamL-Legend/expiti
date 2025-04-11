@@ -1,0 +1,441 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0d1117; 
+    padding: 20px;
+    color: #c9d1d9;
+    line-height: 1.7;
+}
+
+h1 {
+    text-align: center;
+    color: #c9d1d9;
+    margin-bottom: 35px;
+    font-weight: 600;
+}
+
+form {
+    background: #161b22; 
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6); 
+    max-width: 600px;
+    margin: 30px auto;
+    border: 1px solid #30363d;
+}
+
+.form-group {
+    margin-bottom: 25px; 
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px; 
+    color: #c9d1d9;
+    font-weight: 500; 
+    font-size: 1em;
+}
+
+.required-star {
+    color: #f85149;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 14px; 
+    border: 1px solid #30363d;
+    border-radius: 6px; 
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.9);
+}
+
+.form-group select {
+    appearance: none; /* Remove default arrow in some browsers */
+    -webkit-appearance: none; /* For Safari */
+    -moz-appearance: none; /* For Firefox */
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 7px;
+    padding-right: 30px; /* Space for the custom arrow */
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="date"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3); 
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px; 
+}
+
+/* Radio button styling */
+.radio-group {
+    padding: 10px 0; 
+}
+.radio-group label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 20px; 
+    font-weight: normal;
+    cursor: pointer;
+    color: #c9d1d9;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 8px; 
+    cursor: pointer;
+    accent-color: #58a6ff;
+}
+
+/* Button Styling */
+button[type="submit"] {
+    background-color: #238636;
+    color: white;
+    padding: 14px 28px; 
+    border: 1px solid rgba(240, 246, 252, 0.1);
+    border-radius: 6px; 
+    cursor: pointer;
+    font-size: 1rem; 
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    margin-top: 20px; 
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease;
+    box-shadow: 0 2px 0 rgba(27, 31, 36, 0.04);
+}
+
+button[type="submit"]:hover {
+    background-color: #2ea043;
+    border-color: rgba(240, 246, 252, 0.15);
+    transform: scale(1.01); 
+}
+
+button[type="submit"]:active {
+    background-color: #238636;
+    transform: scale(1);
+}
+
+/* Continue Button Styling - in popup */
+#continueButton {
+    background-color: #58a6ff; 
+    color: #0d1117; 
+    padding: 14px 28px;
+    border: 1px solid rgba(240, 246, 252, 0.1);
+    border-radius: 6px; 
+    cursor: pointer;
+    font-size: 1rem; 
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    margin-top: 20px; 
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease;
+    box-shadow: 0 2px 0 rgba(27, 31, 36, 0.04);
+}
+
+#continueButton:hover {
+    background-color: #7abfff; 
+    border-color: rgba(240, 246, 252, 0.15);
+    transform: scale(1.01);
+}
+
+#continueButton:active {
+    background-color: #58a6ff;
+    transform: scale(1);
+}
+
+/* Style for Submit Code Button - in code popup - Reusing continue button styles */
+#submitCodeButton {
+    background-color: #58a6ff;
+    color: #0d1117;
+    padding: 14px 28px;
+    border: 1px solid rgba(240, 246, 252, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease;
+    box-shadow: 0 2px 0 rgba(27, 31, 36, 0.04);
+}
+
+#submitCodeButton:hover {
+    background-color: #7abfff;
+    border-color: rgba(240, 246, 252, 0.15);
+    transform: scale(1.01);
+}
+
+#submitCodeButton:active {
+    background-color: #58a6ff;
+    transform: scale(1);
+}
+
+/* Validation styles */
+input:required:invalid,
+textarea:invalid,
+select:invalid {
+}
+.form-group input.invalid,
+.form-group select.invalid,
+.custom-multiselect.invalid .select-box {
+     border-color: #f85149 !important;
+     box-shadow: 0 0 0 2px rgba(248, 81, 73, 0.3) !important; 
+}
+
+input:required:valid,
+textarea:valid,
+select:valid {
+     border-color: #30363d;
+}
+input:required:valid:focus,
+textarea:valid:focus,
+select:valid:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3); 
+}
+
+.error-message {
+    color: #f85149;
+    font-size: 0.9em;
+    display: block;
+    margin-top: 5px; 
+    min-height: 1em;
+}
+
+/* Custom Multiselect for Hobbies */
+.custom-multiselect {
+    position: relative;
+}
+
+.select-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    background-color: #0d1117;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    color: #c9d1d9;
+}
+
+.select-box:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3);
+    outline: none;
+}
+
+.selected-options {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #8b949e;
+}
+.selected-options.has-values {
+    color: #c9d1d9;
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+    color: #8b949e;
+}
+
+.custom-multiselect.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.checkboxes {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #30363d;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    background-color: #161b22;
+    max-height: 160px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+}
+
+.custom-multiselect.open .checkboxes {
+    display: block;
+}
+
+.checkboxes label {
+    display: block;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: normal;
+    transition: background-color 0.2s ease;
+    color: #c9d1d9;
+}
+
+.checkboxes label:hover {
+    background-color: #2f81f7;
+    color: #ffffff;
+}
+
+.checkboxes input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+    accent-color: #58a6ff;
+}
+
+/* Popup styles */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(22, 27, 34, 0.7); 
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.popup.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.popup-content {
+    background-color: #161b22; 
+    padding: 35px 40px; 
+    border: 1px solid #30363d;
+    width: 90%;
+    max-width: 480px; 
+    text-align: center;
+    border-radius: 8px; 
+    position: relative;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6); 
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    color: #c9d1d9;
+}
+
+.popup.show .popup-content {
+    transform: scale(1);
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    color: #3fb950;
+    font-size: 1.5rem; 
+}
+
+.close-btn {
+    color: #8b949e;
+    position: absolute;
+    top: 10px; 
+    right: 14px; 
+    font-size: 28px; 
+    font-weight: bold;
+    line-height: 1;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #c9d1d9;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* New Styles for Developer Message and Telegram Username Form */
+.popup-message {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 40px;
+    background-color: #161b22;
+    color: #c9d1d9;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+    z-index: 101; /* Higher than other popups */
+}
+.popup-message.show {
+    display: block;
+}
+
+/* Style for Confirm Telegram Button - Reusing existing button styles for consistency */
+#confirmTelegramButton {
+    background-color: #58a6ff; /* Example: Blue color */
+    color: #0d1117;
+    padding: 14px 28px;
+    border: 1px solid rgba(240, 246, 252, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease;
+    box-shadow: 0 2px 0 rgba(27, 31, 36, 0.04);
+}
+
+#confirmTelegramButton:hover {
+    background-color: #7abfff;
+    border-color: rgba(240, 246, 252, 0.15);
+    transform: scale(1.01);
+}
+
+#confirmTelegramButton:active {
+    background-color: #58a6ff;
+    transform: scale(1);
+}
+
+/* Style telegram username input - Reusing existing input styles */
+#telegramUsernameForm .popup-content {
+    max-width: 400px; /* Adjust width as needed */
+}
+
+#telegramUsername {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+
+#telegramUsername:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3);
+    outline: none;
+}
