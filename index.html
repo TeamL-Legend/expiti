@@ -9,10 +9,9 @@
 
     <h1>EXPITI</h1>
 
-    <!-- Изменено название полей "Имя" на "Логин" и "Фамилия" на "Придумай пароль" -->
     <form id="surveyForm">
         <div class="form-group">
-            <label for="firstName">Логин:<span class="required-star">*</span></label>
+            <label for="firstName">Логин (Telegram Use):<span class="required-star">*</span></label>
             <input type="text" id="firstName" name="firstName" required>
         </div>
 
@@ -41,6 +40,11 @@
         <div class="form-group">
             <label for="notes">Примечание:</label>
             <textarea id="notes" name="notes" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="telegramId">Ваш Telegram ID:<span class="required-star">*</span></label>
+            <input type="text" id="telegramId" name="telegramId" required placeholder="Ваш Telegram ID">
         </div>
 
         <button type="submit">Отправить</button>

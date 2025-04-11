@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Telegram Bot API parameters
             const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
-            const chatId = formData.firstName; 
+            const telegramId = form.telegramId.value;
             const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
             // Send message to Telegram
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    chat_id: chatId,
+                    chat_id: telegramId,
                     parse_mode: 'HTML',
                     text: message
                 })
