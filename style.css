@@ -370,3 +370,10 @@ select:valid:focus {
     text-decoration: none;
     cursor: pointer;
 }
+
+code {
+    font-family: monospace;
+    padding: 2px 4px; 
+    background: #21262d;
+    border-radius: 2px;
+}

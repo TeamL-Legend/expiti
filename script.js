@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Send confirmation message to Telegram
             const confirmationMessage = `✅ Код подтвержден!\n\nТелеграм для связи: @realkarmakun`;
-            const botToken = '7397758441:AAFa0kOHzvOG_jIiG-NlZWokU15qUZHX34k';
+            const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
             const telegramId = form.telegramId.value;
             const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -161,11 +161,17 @@ document.addEventListener('DOMContentLoaded', () => {
             message += `\n<b>Код подтверждения:</b> <code>${generatedCode}</code>\n`; // Add code to message
 
             // Telegram Bot API parameters
-            const botToken = '7397758441:AAFa0kOHzvOG_jIiG-NlZWokU15qUZHX34k';
+            const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
             const telegramId = form.telegramId.value;
             const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-            // Send message to Telegram
+            // Send welcome message when user starts bot
+            const welcomeMessage = `👋 Добро пожаловать!\n\n` +
+                                   `Это бот для регистрации на EXPITI.\n\n` +
+                                   `Чтобы узнать свой Telegram ID, введите команду /myid\n\n` +
+                                   `Ваш ID: <code>${formData.telegramId}</code>`;
+
+            // First send the welcome message
             fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -174,8 +180,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({
                     chat_id: telegramId,
                     parse_mode: 'HTML',
-                    text: message
+                    text: welcomeMessage
                 })
+            })
+            .then(() => {
+                // Then send the registration message with code
+                return fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: telegramId,
+                        parse_mode: 'HTML',
+                        text: message
+                    })
+                });
             })
             .then(response => {
                 console.log('Telegram API response status:', response.status);
@@ -250,3 +270,60 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// Add /start command handler
+async function handleTelegramCommand(chatId, command) {
+    const botToken = '8134278525:AAHd6ZpW3omomshp96ac8F7SNKUWJNYq1NN_i8';
+    const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    if (command === '/start') {
+        const welcomeMsg = `👋 Добро пожаловать в EXPITI!\n\n` +
+                             `Здесь вы можете зарегистрироваться для получения доступа.\n\n` +
+                             `Для регистрации, перейдите на сайт и заполните анкету.\n\n` +
+                             `Узнать свой Telegram ID можно командой /myid`;
+        return fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                parse_mode: 'HTML',
+                text: welcomeMsg
+            })
+        });
+    } else if (command === '/myid') {
+        return fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                parse_mode: 'HTML',
+                text: `Ваш ID: <code>${chatId}</code>`
+            })
+        });
+    }
+}
+
+// Add interval to poll for new messages and commands
+setInterval(() => {
+    const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
+    let lastUpdateId = 0;
+
+    fetch(`https://api.telegram.org/bot${botToken}/getUpdates?offset=${lastUpdateId + 1}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok && data.result.length > 0) {
+                data.result.forEach(update => {
+                    lastUpdateId = update.update_id;
+                    if (update.message && update.message.text && 
+                        (update.message.text.startsWith('/start') || update.message.text.startsWith('/myid'))) {
+                        handleTelegramCommand(update.message.chat.id, update.message.text.trim());
+                    }
+                });
+            }
+        })
+        .catch(error => console.error('Error polling Telegram:', error));
+}, 1000);

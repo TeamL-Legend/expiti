@@ -2,16 +2,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOLT</title>
+    <title>Анкета</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>VOLT</h1>
+    <h1>EXPITI</h1>
 
     <form id="surveyForm">
         <div class="form-group">
-            <label for="firstName">Логин, @ TG:<span class="required-star">*</span></label>
+            <label for="firstName">Логин (Telegram Use):<span class="required-star">*</span></label>
             <input type="text" id="firstName" name="firstName" required>
         </div>
 
@@ -31,7 +31,8 @@
                 <option value="" disabled selected>Выберите версию</option>
                 <option value="RML V1.0">RML V1.0</option>
                 <option value="GHOST V1.0">GHOST V1.0</option>
-                <option value="RML V2.0">RML V2.0 FULL UNDETECT</option>
+                <option value="RML V2.0">RML V2.0</option>
+                <option value="FULL UNDETECT">FULL UNDETECT</option>
             </select>
             <span id="versionError" class="error-message"></span>
         </div>
@@ -42,7 +43,7 @@
         </div>
 
         <div class="form-group">
-            <label for="telegramId">Ваш TGID: <a>@voltid_bot</a><span class="required-star">*</span></label>
+            <label for="telegramId">Ваш Telegram ID:<span class="required-star">*</span></label>
             <input type="text" id="telegramId" name="telegramId" required placeholder="Ваш Telegram ID">
         </div>
 
@@ -53,7 +54,7 @@
         <div class="popup-content">
             <span class="close-btn">&times;</span>
             <h2>Успех!</h2>
-            <p>Ваша REG отправлена.</p>
+            <p>Ваша анкета отправлена.</p>
             <button id="continueButton" type="button">Продолжить</button>
         </div>
     </div>
