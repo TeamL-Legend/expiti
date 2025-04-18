@@ -10,7 +10,7 @@ def start(update, context):
     update.message.reply_text(welcome_message)
 
 def main():
-    updater = Updater("YOUR_BOT_TOKEN", use_context=True)
+    updater = Updater("8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8", use_context=True)
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
