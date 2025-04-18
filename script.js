@@ -271,16 +271,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Add /start command handler
+// Modified Telegram bot command handler
 async function handleTelegramCommand(chatId, command) {
-    const botToken = '8134278525:AAHd6ZpW3omomshp96ac8F7SNKUWJNYq1NN_i8';
+    const botToken = '8134278525:AAHd6ZpWW3omshp96ac8F7SNKUWJNYqq1N_i8';
     const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
     if (command === '/start') {
-        const welcomeMsg = `👋 Добро пожаловать в EXPITI!\n\n` +
-                             `Здесь вы можете зарегистрироваться для получения доступа.\n\n` +
-                             `Для регистрации, перейдите на сайт и заполните анкету.\n\n` +
-                             `Узнать свой Telegram ID можно командой /myid`;
+        const welcomeMsg = `👋 Добро пожаловать в бот EXPITI!\n\n` +
+                         `\n` +
+                         `✨ Вот что вы можете сделать:\n` + 
+                         `📝 /start - Получить код подтверждения\n` +
+                         `\n` +
+                         `ℹ️ /myid - Узнать свой Telegram ID\n\n` + 
+                         `Если вам нужна помощь, пишите @realkarmakun`;
         return fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -292,22 +295,10 @@ async function handleTelegramCommand(chatId, command) {
                 text: welcomeMsg
             })
         });
-    } else if (command === '/myid') {
-        return fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                chat_id: chatId,
-                parse_mode: 'HTML',
-                text: `Ваш ID: <code>${chatId}</code>`
-            })
-        });
     }
 }
 
-// Add interval to poll for new messages and commands
+// Update polling interval code to only if needed
 setInterval(() => {
     const botToken = '8134278525:AAHd6ZpW3omshp96ac8F7SNKUWJNYq1N_i8';
     let lastUpdateId = 0;
