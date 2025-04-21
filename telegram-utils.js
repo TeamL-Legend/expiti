@@ -99,3 +99,24 @@ export async function sendVerificationCode(telegramId, code) {
         return false;
     }
 }
+
+export async function sendLoginNotification(telegramId, message) {
+    try {
+        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: telegramId,
+                text: message
+            })
+        });
+
+        const result = await response.json();
+        return result.ok;
+    } catch (error) {
+        console.error('Error sending login notification:', error);
+        return false;
+    }
+}

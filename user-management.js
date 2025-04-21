@@ -113,7 +113,7 @@ export async function handleVerificationSubmit() {
     }
 }
 
-export function handleLogin() {
+export async function handleLogin() {
     const loginTelegramId = document.getElementById('loginTelegramId').value;
     const loginPassword = document.getElementById('loginPassword').value;
     const errorMessageEl = document.getElementById('loginErrorMessage');
@@ -124,11 +124,29 @@ export function handleLogin() {
     );
 
     if (user) {
-        alert('Login successful! Welcome, ' + user.firstName);
-        
-        sessionStorage.setItem('currentUser', JSON.stringify(user));
-        
-        document.getElementById('loginModal').style.display = 'none';
+        try {
+            // Send login notification to Telegram
+            const loginMessage = `👤 Выполнен вход в аккаунт:
+🆔 Telegram ID: ${user.telegramId}
+👤 Имя: ${user.firstName} ${user.lastName}
+✉️ Username: ${user.email}
+🕒 Время входа: ${new Date().toLocaleString()}`;
+
+            const notificationSent = await TelegramUtils.sendLoginNotification(user.telegramId, loginMessage);
+
+            if (notificationSent) {
+                // Redirect to products page instead of alert
+                window.location.href = 'products.html';
+            } else {
+                alert('Login successful, but could not send Telegram notification.');
+            }
+            
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+            document.getElementById('loginModal').style.display = 'none';
+        } catch (error) {
+            console.error('Error sending login notification:', error);
+            alert('Login successful, but encountered an error sending Telegram notification.');
+        }
     } else {
         errorMessageEl.textContent = 'Invalid Telegram ID or Password';
     }
