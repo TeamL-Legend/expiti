@@ -12,12 +12,13 @@
         .products-container {
             display: flex;
             flex-direction: column;
-            height: 100%;
-            overflow-y: scroll;
+            flex-grow: 1; /* Allow container to expand */
+            overflow-y: auto; /* Enable scrolling */
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none;  /* Internet Explorer 10+ */
-            padding-bottom: 100px;
+            padding-bottom: 20px; /* Reduced padding */
             scroll-snap-type: y mandatory;
+            max-height: calc(100vh - 120px); /* Adjust based on status bar and other elements */
         }
         .products-container::-webkit-scrollbar {
             display: none; /* WebKit */
@@ -93,8 +94,6 @@
         }
         .profile-icon {
             position: absolute;
-            top: 50px;  
-            right: 20px;  
             width: 40px;
             height: 40px;
             background-color: #007AFF;
@@ -272,6 +271,15 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileIcon = document.getElementById('profileIcon');
+            
+            // Make sure the icon is positioned correctly
+            profileIcon.style.position = 'absolute';
+            profileIcon.style.top = '60px';  
+            profileIcon.style.right = '20px';
+        });
+
         // Add smooth scrolling behavior for touch devices
         const productsContainer = document.querySelector('.products-container');
         let isDragging = false;
