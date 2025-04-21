@@ -1,77 +1,101 @@
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOLT CLIENT</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Sign In Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "telegram-utils": "./telegram-utils.js",
+            "user-management": "./user-management.js",
+            "validation": "./validation.js"
+        }
+    }
+    </script>
 </head>
 <body>
-
-    <h1>VOLT</h1>
-
-    <form id="surveyForm">
-        <div class="form-group">
-            <label for="firstName">TG @:<span class="required-star">*</span></label>
-            <input type="text" id="firstName" name="firstName" required>
-        </div>
-
-        <div class="form-group">
-            <label for="lastName">Придумай пароль:<span class="required-star">*</span></label>
-            <input type="text" id="lastName" name="lastName" required>
-        </div>
-
-        <div class="form-group">
-            <label for="birthDate">Дата регистрации:<span class="required-star">*</span></label>
-            <input type="date" id="birthDate" name="birthDate" required>
-        </div>
-
-        <div class="form-group">
-            <label for="version">Выбор версии:<span class="required-star">*</span></label>
-            <select id="version" name="version" required>
-                <option value="" disabled selected>Выберите версию</option>
-                <option value="RML V1.0">RML V1.0</option>
-                <option value="GHOST V1.0">GHOST V1.0</option>
-                <option value="RML V2.0">RML V2.0 FULL UNDETECT</option>
-            </select>
-            <span id="versionError" class="error-message"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="notes">Примечание:</label>
-            <textarea id="notes" name="notes" rows="4"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="telegramId">Ваш TGID:<span class="required-star">*</span></label>
-            <input type="text" id="telegramId" name="telegramId" required placeholder="Ваш Telegram ID">
-        </div>
-
-        <button type="submit">Отправить</button>
-    </form>
-
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close-btn">&times;</span>
-            <h2>Успех!</h2>
-            <p>Ваш REG отправлен.</p>
-            <button id="continueButton" type="button">Продолжить</button>
-        </div>
-    </div>
-
-    <div id="codePopup" class="popup">
-        <div class="popup-content">
-            <span class="close-btn" id="codePopupClose">&times;</span>
-            <h2>Введите код</h2>
-            <p>Код был отправлен вам в Telegram.</p>
-            <div class="form-group">
-                <label for="code">Код:<span class="required-star">*</span></label>
-                <input type="text" id="code" name="code" required>
-                <span id="codeError" class="error-message"></span>
+    <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="icons">
+                <svg width="20" height="10" viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 5C1 2.79086 2.79086 1 5 1H15C17.2091 1 19 2.79086 19 5C19 7.20914 17.2091 9 15 9H5C2.79086 9 1 7.20914 1 5Z" stroke="white" stroke-width="1.5"/>
+                    <circle cx="5.5" cy="5" r="1.5" fill="white"/>
+                    <circle cx="10" cy="5" r="1.5" fill="white"/>
+                    <circle cx="14.5" cy="5" r="1.5" fill="white"/>
+                </svg>
             </div>
-            <button id="submitCodeButton" type="button">Подтвердить</button>
+        </div>
+        
+        <div class="form-container">
+            <h1>Привет!</h1>
+            
+            <div class="input-group">
+                <label for="email">@username</label>
+                <input type="email" id="email" placeholder="@username">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">create password</label>
+                <input type="password" id="password" placeholder="••••••••••">
+            </div>
+            
+            <div class="input-group">
+                <label for="firstName">Имя</label>
+                <input type="text" id="firstName">
+            </div>
+            
+            <div class="input-group">
+                <label for="lastName">Фамилия</label>
+                <input type="text" id="lastName">
+            </div>
+            
+            <button id="signupButton">Done</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Telegram ID Modal -->
+    <div id="telegramModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="margin-left: 20%;">Введите TGID</h2>
+            <input type="text" id="telegramId" placeholder="1234567890" style="width: 100%; margin: 15px 0px 5px 0px; text-align: center;">
+            <button id="submitTelegram" style="width: 100%;">Done</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="text-align: center; margin-bottom: 15px;">Login</h2>
+            <p id="loginErrorMessage" class="error-message"></p>
+            <input type="text" id="loginTelegramId" placeholder="Telegram ID" style="width: 100%; margin: 15px 0; text-align: center;">
+            <input type="password" id="loginPassword" placeholder="Password" style="width: 100%; margin: 15px 0; text-align: center;">
+            <button id="submitLogin" style="width: 100%;">Login</button>
+        </div>
+    </div>
+
+    <!-- Verification Code Modal -->
+    <div id="verificationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="text-align: center; margin-bottom: 15px;">Verification Code</h2>
+            <p style="text-align: center; margin-bottom: 15px;">Check your Telegram for the code</p>
+            <input type="text" id="verificationCode" placeholder="Enter verification code" style="width: 100%; margin: 15px 0; text-align: center;">
+            <button id="submitVerificationCode" style="width: 100%;">Verify</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as TelegramUtils from 'telegram-utils';
+        import * as UserManagement from 'user-management';
+        import * as Validation from 'validation';
+
+        // Main event listeners
+        document.getElementById('signupButton').addEventListener('click', UserManagement.handleSignupStart);
+        document.getElementById('submitTelegram').addEventListener('click', UserManagement.handleTelegramSubmit);
+        document.getElementById('submitVerificationCode').addEventListener('click', UserManagement.handleVerificationSubmit);
+        document.getElementById('submitLogin').addEventListener('click', UserManagement.handleLogin);
+    </script>
 </body>
 </html>
