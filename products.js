@@ -114,7 +114,7 @@ async function buyProduct(productId) {
                 body: JSON.stringify({
                     chat_id: currentUser.telegramId,
                     caption: `Спасибо за покупку продукта: ${productId}!\nФайл был успешно отправлен.`,
-                    document: 'https://drive.google.com/file/d/1DVlVrFSqvW3RIehuWhw59OvdAn2WVBjq/view?usp=drive_link'
+                    document: 'https://drive.google.com/uc?export=download&id=1DVlVrFSqvW3RIehuWhw59OvdAn2WVBjq'
                 })
             });
 
