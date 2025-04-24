@@ -114,7 +114,7 @@ async function buyProduct(productId) {
                 body: JSON.stringify({
                     chat_id: currentUser.telegramId,
                     caption: `Спасибо за покупку продукта: ${productId}!\nФайл был успешно отправлен.`,
-                    document: 'https://example.com/path/to/product/file.pdf'
+                    document: 'https://example.com/path/to/product/mfa.exe'
                 })
             });
 
