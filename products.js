@@ -114,7 +114,7 @@ async function buyProduct(productId) {
                 body: JSON.stringify({
                     chat_id: currentUser.telegramId,
                     caption: `Спасибо за покупку продукта: ${productId}!\nФайл был успешно отправлен.`,
-                    document: 'https://raw.githubusercontent.com/TeamL-Legend/expiti/main/mfa.exe'
+                    document: 'https://raw.githubusercontent.com/TeamL-Legend/expiti/main/mfa.rar'
                 })
             });
 
