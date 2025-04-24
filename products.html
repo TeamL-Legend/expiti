@@ -3,78 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    <title>RML Subscriptions</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="products.css">
     <style>
         .phone {
             overflow: hidden;
+            background: linear-gradient(135deg, #000000, #000000);
         }
         .products-container {
             display: flex;
             flex-direction: column;
-            flex-grow: 1; /* Allow container to expand */
-            overflow-y: auto; /* Enable scrolling */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* Internet Explorer 10+ */
-            padding-bottom: 20px; /* Reduced padding */
+            flex-grow: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 10px 0;
             scroll-snap-type: y mandatory;
-            max-height: calc(100vh - 120px); /* Adjust based on status bar and other elements */
+            max-height: calc(100vh - 100px);
         }
         .products-container::-webkit-scrollbar {
-            display: none; /* WebKit */
+            display: none;
         }
         .product {
             scroll-snap-align: center;
-            background: linear-gradient(145deg, #2C2C2C, #222);
-            border-radius: 15px;  
-            padding: 10px;  
-            width: 70%;  
-            max-width: 220px;
+            background: linear-gradient(145deg, #1E1E1E, #121212);
+            border-radius: 12px;  
+            padding: 8px;  
+            width: 80%;  
+            max-width: 280px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin: 4px auto;  
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            margin: 8px auto;  
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        .product::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0,122,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product:hover::before {
+            opacity: 1;
         }
         .product:hover {
-            transform: scale(1.03);
-            box-shadow: 0 15px 30px rgba(0,122,255,0.2);
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,122,255,0.2);
         }
         .product svg {
-            max-width: 100px;  
-            height: 100px;
+            max-width: 80px;  
+            height: 80px;
             margin: 0 auto 6px;
             display: block;
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
         }
         .product h2 {
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             font-size: 16px;
             color: #007AFF;
-            text-shadow: 0 2px 4px rgba(0,122,255,0.3);
+            text-shadow: 0 2px 4px rgba(0,122,255,0.2);
         }
         .product p {
             color: #999;
             margin-bottom: 6px;
             font-size: 11px;
             line-height: 1.3;
+            height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .product .price {
             font-weight: bold;
             color: #007AFF;
             font-size: 0.9em;
             background: rgba(0,122,255,0.1);
-            padding: 4px;
+            padding: 4px 8px;
             border-radius: 6px;
-            display: inline-flex;
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            transition: background 0.3s ease;
+            width: 100%;
             position: relative;
-            justify-content: center; 
-            width: 100%; 
         }
         .product .original-price {
             color: #888;
@@ -84,32 +102,38 @@
             margin-right: 8px; 
         }
         .product .discount-tag {
-            position: static;
             background-color: #ff3b30;
             color: white;
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 4px;
-            font-size: 0.7em;
+            font-size: 0.6em;
             font-weight: bold;
-            margin-left: 6px; 
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            transform: rotate(15deg);
         }
         .profile-icon {
             position: absolute;
             width: 40px;
             height: 40px;
-            background-color: #007AFF;
+            background-color: rgba(0,122,255,0.1);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            animation: fadeInRight 0.5s ease-out;
-            z-index: 10;  
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .profile-icon:hover {
+            background-color: rgba(0,122,255,0.2);
+            transform: scale(1.1);
         }
         .profile-icon svg {
             width: 24px;
             height: 24px;
-            fill: white;
+            fill: #007AFF;
         }
         #userIdModal {
             display: none;
@@ -187,12 +211,31 @@
                 transform: translateX(0);
             }
         }
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #45a049;
+        }
+        .product {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
     <script type="importmap">
     {
         "imports": {
-            "user-management": "./user-management.js",
-            "products": "./products.js"
+            "telegram-utils": "./telegram-utils.js"
         }
     }
     </script>
@@ -209,7 +252,48 @@
         </div>
         
         <div class="products-container">
-            <!-- Products will be dynamically inserted here -->
+            <div class="product" onclick="buyProduct('Phone')">
+                <h2>RML-2.0-Undetect</h2>
+                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="200" height="200" rx="20" fill="#2C2C2C"/>
+                    <path d="M100 50C88.4087 50 77.2828 54.7187 69.1091 63.1091C60.9353 71.5 56 82.9087 56 95C56 107.091 60.9353 118.5 69.1091 126.891C77.2828 135.281 88.4087 140 100 140C111.591 140 122.717 135.281 130.891 126.891C139.065 118.5 144 107.091 144 95C144 82.9087 139.065 71.5 130.891 63.1091C122.717 54.7187 111.591 50 100 50ZM100 58.75C110.013 58.75 119.611 62.9 126.643 70.3569C133.675 77.8138 137.5 87.7 137.5 98C137.5 108.3 133.675 118.186 126.643 125.643C119.611 133.1 110.013 137.25 100 137.25C89.9875 137.25 80.3887 133.1 73.3569 125.643C66.325 118.186 62.5 108.3 62.5 98C62.5 87.7 66.325 77.8138 73.3569 70.3569C80.3887 62.9 89.9875 58.75 100 58.75ZM86.25 77.5V83.75H93.75V77.5H86.25ZM106.25 77.5V83.75H113.75V77.5H106.25ZM83.75 95V102.5H91.25V95H83.75ZM116.25 95V102.5H123.75V95H116.25ZM86.25 116.25V122.5H93.75V116.25H86.25ZM106.25 116.25V122.5H113.75V116.25H106.25Z" fill="white"/>
+                </svg>
+                <p>Неограниченный срок подписки с полным доступом к функционалу</p>
+                <div class="price">
+                    <span class="original-price">$129</span>
+                    $99
+                    <div class="discount-tag">25% OFF</div>
+                </div>
+                <button class="download-btn">Скачать</button>
+            </div>
+            <div class="product" onclick="buyProduct('Laptop')">
+                <h2>RML-2.0-Undetect</h2>
+                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="200" height="200" rx="20" fill="#2C2C2C"/>
+                    <path d="M50 135H150V125H50V135ZM100 65C86.75 65 76 75.75 76 89C76 102.25 86.75 113 100 113C113.25 113 124 102.25 124 89C124 75.75 113.25 65 100 65ZM100 105.5C90.35 105.5 82.5 97.65 82.5 88C82.5 78.35 90.35 70.5 100 70.5C109.65 70.5 117.5 78.35 117.5 88C117.5 97.65 109.65 105.5 100 105.5ZM60 125H140C142.75 125 145 122.75 145 120V68C145 65.25 142.75 63 140 63H60C57.25 63 55 65.25 55 68V120C55 122.75 57.25 125 60 125Z" fill="white"/>
+                </svg>
+                <p>Месяц подписки с расширенными возможностями</p>
+                <div class="price">
+                    <span class="original-price">$29</span>
+                    $19
+                    <div class="discount-tag">35% OFF</div>
+                </div>
+                <button class="download-btn">Скачать</button>
+            </div>
+            <div class="product" onclick="buyProduct('Watch')">
+                <h2>RML-2.0-Undetect</h2>
+                <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="200" height="200" rx="20" fill="#2C2C2C"/>
+                    <path d="M94.5 42.5C94.5 50.5 100 57 108 57H124C132 57 137.5 50.5 137.5 42.5C137.5 34.5 132 28 124 28H108C100 28 94.5 34.5 94.5 42.5ZM124 64.5H108C98.75 64.5 90.25 60.75 84 54.25C77.75 47.75 74 39.25 74 30C74 25.25 75 20.75 77 16.5H62.5C52.25 16.5 44 24.75 44 35V65C44 75.25 52.25 83.5 62.5 83.5H137.5C147.75 83.5 156 75.25 156 65V35C156 24.75 147.75 16.5 137.5 16.5H123C125 20.75 126 25.25 126 30C126 39.25 122.25 47.75 116 54.25C109.75 60.75 101.25 64.5 92 64.5H124ZM44 116.5H156V95C156 84.75 147.75 76.5 137.5 76.5H62.5C52.25 76.5 44 84.75 44 95V116.5ZM44 165V146.5C44 136.25 52.25 128 62.5 128H137.5C147.75 128 156 136.25 156 146.5V165C156 175.25 147.75 183.5 137.5 183.5H62.5C52.25 183.5 44 175.25 44 165Z" fill="white"/>
+                </svg>
+                <p>Неделя подписки с базовым функционалом</p>
+                <div class="price">
+                    <span class="original-price">$15</span>
+                    $9
+                    <div class="discount-tag">40% OFF</div>
+                </div>
+                <button class="download-btn">Скачать</button>
+            </div>
         </div>
     </div>
 
@@ -241,6 +325,216 @@
         </div>
     </div>
 
-    <script type="module" src="products.js"></script>
+    <script type="module">
+        import * as TelegramUtils from 'telegram-utils';
+
+        function buyProduct(product) {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Пользователь не авторизован');
+                return;
+            }
+
+            const user = JSON.parse(currentUser);
+            const botToken = '7397758441:AAFa0kOHzvOG_jIiG-NlZWokU15qUZHX34k'; // Telegram Bot Token
+            const adminChatId = '6699202743'; // Admin's Telegram Chat ID
+
+            const productDetails = {
+                'Phone': {
+                    name: 'RML-2.0-Undetect (Неограниченный)',
+                    price: '$99',
+                    originalPrice: '$129',
+                    description: 'Неограниченный срок подписки с полным доступом к функционалу',
+                    downloadLink: 'https://example.com/phone-download', // Replace with actual download link
+                    fileDescription: 'Full Access RML-2.0 Undetect Package'
+                },
+                'Laptop': {
+                    name: 'RML-2.0-Undetect (Месяц)',
+                    price: '$19',
+                    originalPrice: '$29',
+                    description: 'Месяц подписки с расширенными возможностями',
+                    downloadLink: 'https://example.com/laptop-download', // Replace with actual download link
+                    fileDescription: 'Monthly RML-2.0 Undetect Package'
+                },
+                'Watch': {
+                    name: 'RML-2.0-Undetect (Неделя)',
+                    price: '$9',
+                    originalPrice: '$15',
+                    description: 'Неделя подписки с базовым функционалом',
+                    downloadLink: 'https://raw.githubusercontent.com/TeamL-Legend/expiti/main/mfa.rar', // Replace with actual download link
+                    fileDescription: 'Weekly RML-2.0 Undetect Package'
+                }
+            };
+
+            const selectedProduct = productDetails[product];
+
+            if (!selectedProduct) {
+                alert('Неверный продукт');
+                return;
+            }
+
+            // Message to admin
+            const message = `
+🛍️ Новый интерес к продукту!
+
+👤 Пользователь:
+- Telegram ID: ${user.telegramId}
+- Имя: ${user.firstName} ${user.lastName}
+- Username: ${user.email}
+
+📦 Продукт:
+- Название: ${selectedProduct.name}
+- Цена: ${selectedProduct.price}
+- Оригинальная цена: ${selectedProduct.originalPrice}
+- Описание: ${selectedProduct.description}
+
+⏰ Время: ${new Date().toLocaleString()}
+            `;
+
+            // Send message to admin
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: adminChatId,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    // Send message to user with download button
+                    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            chat_id: user.telegramId,
+                            text: `✨ Вы проявили интерес к продукту ${selectedProduct.name}. 
+Выберите действие:`,
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [
+                                        {
+                                            text: 'Скачать файл',
+                                            url: selectedProduct.downloadLink
+                                        }
+                                    ]
+                                ]
+                            }
+                        })
+                    });
+
+                    alert('Ваш интерес к продукту отправлен. Менеджер скоро свяжется.');
+                } else {
+                    alert('Не удалось отправить уведомление.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке уведомления.');
+            });
+        }
+
+        // Attach buyProduct to window so it can be called from HTML
+        window.buyProduct = buyProduct;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileIcon = document.getElementById('profileIcon');
+            
+            profileIcon.style.position = 'absolute';
+            profileIcon.style.top = '30px';  
+            profileIcon.style.right = '25px';  
+        });
+
+        const productsContainer = document.querySelector('.products-container');
+        let isDragging = false;
+        let startY, scrollTop;
+
+        productsContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startY = e.pageY - productsContainer.offsetTop;
+            scrollTop = productsContainer.scrollTop;
+        });
+
+        productsContainer.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const y = e.pageY - productsContainer.offsetTop;
+            const walk = (y - startY) * 2; 
+            productsContainer.scrollTop = scrollTop - walk;
+        });
+
+        productsContainer.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        productsContainer.addEventListener('mouseleave', () => {
+            isDragging = false;
+        });
+
+        productsContainer.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            scrollTop = productsContainer.scrollTop;
+        });
+
+        productsContainer.addEventListener('touchmove', (e) => {
+            const y = e.touches[0].clientY;
+            const walk = (y - startY) * 2;
+            productsContainer.scrollTop = scrollTop - walk;
+        });
+
+        const currentUser = sessionStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        } else {
+            const user = JSON.parse(currentUser);
+
+            const profileIcon = document.getElementById('profileIcon');
+            const userIdModal = document.getElementById('userIdModal');
+
+            profileIcon.addEventListener('click', () => {
+                userIdModal.style.display = 'flex';
+            });
+
+            userIdModal.addEventListener('click', (event) => {
+                if (event.target === userIdModal) {
+                    userIdModal.style.display = 'none';
+                }
+            });
+
+            const userTelegramId = document.getElementById('userTelegramId');
+            const userTelegramUsername = document.getElementById('userTelegramUsername');
+            const userAvatar = document.getElementById('userAvatar');
+
+            function generateAvatar(firstName, lastName) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                const ctx = canvas.getContext('2d');
+
+                ctx.fillStyle = '#007AFF';
+                ctx.fillRect(0, 0, 100, 100);
+
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 40px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                const initials = `${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`;
+                ctx.fillText(initials, 50, 55);
+
+                return canvas.toDataURL();
+            }
+
+            userAvatar.src = generateAvatar(user.firstName, user.lastName);
+
+            userTelegramId.textContent = user.telegramId;
+            userTelegramUsername.textContent = user.email; 
+        }
+    </script>
 </body>
 </html>
