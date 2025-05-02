@@ -5,17 +5,22 @@ let currentVerificationCode = '';
 let currentUserData = null;
 
 export function saveRegisteredUser(userData) {
+    // Store registered users in localStorage
     let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
     
+    // Check if user already exists
     const existingUserIndex = registeredUsers.findIndex(user => user.telegramId === userData.telegramId);
     
     if (existingUserIndex !== -1) {
+        // Update existing user
         registeredUsers[existingUserIndex] = userData;
     } else {
+        // Add new user
         registeredUsers.push(userData);
     }
     
     localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+    console.log('User registered successfully:', userData);
 }
 
 export function checkRegisteredUser(telegramId) {
@@ -124,30 +129,11 @@ export async function handleLogin() {
     );
 
     if (user) {
-        try {
-            // Send login notification to Telegram
-            const loginMessage = `👤 Выполнен вход в аккаунт:
-🆔 Telegram ID: ${user.telegramId}
-👤 Имя: ${user.firstName} ${user.lastName}
-✉️ Username: ${user.email}
-🕒 Время входа: ${new Date().toLocaleString()}`;
-
-            const notificationSent = await TelegramUtils.sendLoginNotification(user.telegramId, loginMessage);
-
-            if (notificationSent) {
-                // Redirect to products page instead of alert
-                window.location.href = 'products.html';
-            } else {
-                alert('Login successful, but could not send Telegram notification.');
-            }
-            
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-            document.getElementById('loginModal').style.display = 'none';
-        } catch (error) {
-            console.error('Error sending login notification:', error);
-            alert('Login successful, but encountered an error sending Telegram notification.');
-        }
+        // Successful login
+        sessionStorage.setItem('currentUser', JSON.stringify(user));
+        window.location.href = 'products.html';
     } else {
-        errorMessageEl.textContent = 'Invalid Telegram ID or Password';
+        // Login failed
+        errorMessageEl.textContent = 'Неверный Telegram ID или пароль. Пожалуйста, проверьте данные.';
     }
 }

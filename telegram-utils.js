@@ -120,3 +120,66 @@ export async function sendLoginNotification(telegramId, message) {
         return false;
     }
 }
+
+// Store and retrieve anonymous messages
+export async function sendAnonymousMessage(senderTelegramId, recipientTelegramId, message) {
+    try {
+        // General message to recipient
+        const recipientMessage = `
+        🕵️ Анонимное сообщение:
+        ${message}
+
+        Отправлено анонимно через RML-2.0
+        `;
+
+        // Notification to admin
+        const adminMessage = `
+        🔏 Отправлено анонимное сообщение:
+        👤 Отправитель: ${senderTelegramId}
+        📧 Получатель: ${recipientTelegramId}
+        📝 Сообщение: ${message}
+        `;
+
+        // Send message to recipient
+        const recipientResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: recipientTelegramId,
+                text: recipientMessage
+            })
+        });
+
+        // Send notification to admin
+        const adminResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: ADMIN_TELEGRAM_CHAT_ID,
+                text: adminMessage
+            })
+        });
+
+        const recipientResult = await recipientResponse.json();
+        const adminResult = await adminResponse.json();
+
+        return recipientResult.ok && adminResult.ok;
+    } catch (error) {
+        console.error('Error sending anonymous message:', error);
+        return false;
+    }
+}
+
+export async function getRegisteredUsers() {
+    // Retrieve registered users from localStorage
+    const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    return registeredUsers.map(user => ({
+        telegramId: user.telegramId,
+        firstName: user.firstName,
+        lastName: user.lastName
+    }));
+}

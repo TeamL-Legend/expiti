@@ -231,6 +231,34 @@
             flex-direction: column;
             align-items: center;
         }
+
+        #anonymousMessageModal {
+            display: none;
+        }
+        #anonymousMessageModal .modal-content {
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .anonymous-select, 
+        #anonymousMessageText {
+            width: 100%;
+            padding: 10px;
+            background: #2C2C2C;
+            border: 1px solid #007AFF;
+            color: white;
+            border-radius: 5px;
+        }
+        #sendAnonymousMessageBtn {
+            background-color: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
     <script type="importmap">
     {
@@ -321,10 +349,28 @@
                         <div id="userSubscriptionStatus" class="user-detail-value">No Active</div>
                     </div>
                 </div>
+                <button id="anonymousButton">Анонимные сообщения</button>
             </div>
         </div>
     </div>
 
+    <!-- Anonymous Message Modal -->
+    <div id="anonymousMessageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Анонимное сообщение</h2>
+            <select id="recipientSelect" class="anonymous-select">
+            </select>
+            <textarea id="anonymousMessageText" placeholder="Введите ваше анонимное сообщение..." rows="4"></textarea>
+            <button id="sendAnonymousMessageBtn">Отправить анонимно</button>
+        </div>
+    </div>
+    <div style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(0,0,0,0.7); color: rgba(255,255,255,0.5); text-align: center; padding: 10px; font-size: 10px; word-wrap: break-word; overflow-wrap: break-word;">
+        &copy; 2025 ООО "TeamL-Technology" | CEO: @realkarmakun | М.Д.Д | INVEST: Russia Federation 
+        | Юр. адрес: Perm, г. Perm, ул. Lenina
+        | Расчетный счет: @voltceo в ПАО "@voltbank_bot" 
+        | БИК: 044525225 | Supported: @telegram 
+        | Все права защищены | @volt_privacypolicy_bot |
+    </div>
     <script type="module">
         import * as TelegramUtils from 'telegram-utils';
 
@@ -345,7 +391,7 @@
                     price: '$99',
                     originalPrice: '$129',
                     description: 'Неограниченный срок подписки с полным доступом к функционалу',
-                    downloadLink: 'https://raw.githubusercontent.com/TeamL-Legend/expiti/main/mfa.rar', // Replace with actual download link
+                    downloadLink: 'https://example.com/phone-download', // Replace with actual download link
                     fileDescription: 'Full Access RML-2.0 Undetect Package'
                 },
                 'Laptop': {
@@ -353,7 +399,7 @@
                     price: '$19',
                     originalPrice: '$29',
                     description: 'Месяц подписки с расширенными возможностями',
-                    downloadLink: 'https://raw.githubusercontent.com/TeamL-Legend/expiti/main/mfa.rar', // Replace with actual download link
+                    downloadLink: 'https://example.com/laptop-download', // Replace with actual download link
                     fileDescription: 'Monthly RML-2.0 Undetect Package'
                 },
                 'Watch': {
@@ -534,6 +580,78 @@
 
             userTelegramId.textContent = user.telegramId;
             userTelegramUsername.textContent = user.email; 
+
+            const anonymousButton = document.getElementById('anonymousButton');
+            const anonymousMessageModal = document.getElementById('anonymousMessageModal');
+            const recipientSelect = document.getElementById('recipientSelect');
+            const anonymousMessageText = document.getElementById('anonymousMessageText');
+            const sendAnonymousMessageBtn = document.getElementById('sendAnonymousMessageBtn');
+
+            anonymousButton.addEventListener('click', async () => {
+                recipientSelect.innerHTML = ''; // Clear previous options
+                
+                try {
+                    const users = await TelegramUtils.getRegisteredUsers();
+                    
+                    // Add default option
+                    const defaultOption = document.createElement('option');
+                    defaultOption.text = 'Выберите получателя';
+                    defaultOption.value = '';
+                    recipientSelect.add(defaultOption);
+                    
+                    // Populate users, excluding current user
+                    users.forEach(user => {
+                        if (user.telegramId !== JSON.parse(sessionStorage.getItem('currentUser')).telegramId) {
+                            const option = document.createElement('option');
+                            option.value = user.telegramId;
+                            option.text = `${user.firstName} ${user.lastName}`;
+                            recipientSelect.add(option);
+                        }
+                    });
+
+                    anonymousMessageModal.style.display = 'flex';
+                } catch (error) {
+                    console.error('Error fetching users:', error);
+                    alert('Не удалось загрузить список пользователей');
+                }
+            });
+
+            // Close modal when clicking outside
+            anonymousMessageModal.addEventListener('click', (event) => {
+                if (event.target === anonymousMessageModal) {
+                    anonymousMessageModal.style.display = 'none';
+                }
+            });
+
+            sendAnonymousMessageBtn.addEventListener('click', async () => {
+                const recipient = recipientSelect.options[recipientSelect.selectedIndex].text;
+                const recipientId = recipientSelect.value;
+                const message = anonymousMessageText.value.trim();
+
+                if (!recipientId || !message) {
+                    alert('Пожалуйста, выберите получателя и введите сообщение');
+                    return;
+                }
+
+                try {
+                    const sent = await TelegramUtils.sendAnonymousMessage(
+                        JSON.parse(sessionStorage.getItem('currentUser')).telegramId, 
+                        recipientId, 
+                        message
+                    );
+
+                    if (sent) {
+                        anonymousMessageModal.style.display = 'none';
+                        anonymousMessageText.value = '';
+                        recipientSelect.selectedIndex = 0;
+                    } else {
+                        alert('Не удалось отправить сообщение!');
+                    }
+                } catch (error) {
+                    console.error('Error sending anonymous message:', error);
+                    alert('Произошла ошибка при отправке сообщения!');
+                }
+            });
         }
     </script>
 </body>
