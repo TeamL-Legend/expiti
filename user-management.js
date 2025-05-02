@@ -69,8 +69,21 @@ export async function handleQuickLoginVerification() {
         const registeredUser = checkRegisteredUser(quickLoginTelegramId);
         
         if (registeredUser) {
-            sessionStorage.setItem('currentUser', JSON.stringify(registeredUser));
-            window.location.href = 'products.html';
+            try {
+                // Send login notifications
+                await TelegramUtils.sendLoginNotification(quickLoginTelegramId, {
+                    loginMethod: 'Quick Login',
+                    platformVersion: 'RML-2.0'
+                });
+
+                sessionStorage.setItem('currentUser', JSON.stringify(registeredUser));
+                window.location.href = 'products.html';
+            } catch (error) {
+                console.error('Quick login notification error:', error);
+                // Still proceed with login even if notification fails
+                sessionStorage.setItem('currentUser', JSON.stringify(registeredUser));
+                window.location.href = 'products.html';
+            }
         } else {
             alert('Пользователь не найден');
         }
@@ -185,9 +198,22 @@ export async function handleLogin() {
     );
 
     if (user) {
-        // Successful login
-        sessionStorage.setItem('currentUser', JSON.stringify(user));
-        window.location.href = 'products.html';
+        try {
+            // Send login notifications
+            await TelegramUtils.sendLoginNotification(loginTelegramId, {
+                loginMethod: 'Password',
+                platformVersion: 'RML-2.0'
+            });
+
+            // Successful login
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+            window.location.href = 'products.html';
+        } catch (error) {
+            console.error('Login notification error:', error);
+            // Still proceed with login even if notification fails
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+            window.location.href = 'products.html';
+        }
     } else {
         // Login failed
         errorMessageEl.textContent = 'Неверный Telegram ID или пароль. Пожалуйста, проверьте данные.';

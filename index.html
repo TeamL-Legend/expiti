@@ -162,19 +162,9 @@
         import * as TelegramUtils from 'telegram-utils';
         import * as UserManagement from 'user-management';
 
-        // Main event listeners
-        document.getElementById('signupButton').addEventListener('click', UserManagement.handleSignupStart);
-        document.getElementById('submitTelegram').addEventListener('click', UserManagement.handleTelegramSubmit);
-        document.getElementById('submitVerificationCode').addEventListener('click', UserManagement.handleVerificationSubmit);
-        document.getElementById('submitLogin').addEventListener('click', UserManagement.handleLogin);
+        document.addEventListener('DOMContentLoaded', async () => {
+            await TelegramUtils.initializeGlobalStorage();
 
-        // New event listener for switching to login
-        document.getElementById('switchToLoginButton').addEventListener('click', () => {
-            document.getElementById('loginModal').style.display = 'flex';
-        });
-
-        // Show update modal on page load
-        document.addEventListener('DOMContentLoaded', () => {
             const updateModal = document.getElementById('updateModal');
             const closeUpdateModalBtn = document.getElementById('closeUpdateModal');
 
@@ -184,7 +174,6 @@
                 updateModal.style.display = 'none';
             });
 
-            // Close modal if clicked outside
             updateModal.addEventListener('click', (event) => {
                 if (event.target === updateModal) {
                     updateModal.style.display = 'none';
@@ -192,7 +181,15 @@
             });
         });
 
-        // New quick login event listeners
+        document.getElementById('signupButton').addEventListener('click', UserManagement.handleSignupStart);
+        document.getElementById('submitTelegram').addEventListener('click', UserManagement.handleTelegramSubmit);
+        document.getElementById('submitVerificationCode').addEventListener('click', UserManagement.handleVerificationSubmit);
+        document.getElementById('submitLogin').addEventListener('click', UserManagement.handleLogin);
+
+        document.getElementById('switchToLoginButton').addEventListener('click', () => {
+            document.getElementById('loginModal').style.display = 'flex';
+        });
+
         document.getElementById('loginTelegramId').addEventListener('input', UserManagement.checkQuickLoginAvailability);
         document.getElementById('quickLoginBtn').addEventListener('click', UserManagement.sendQuickLoginVerificationCode);
         document.getElementById('submitQuickLoginVerificationCode').addEventListener('click', UserManagement.handleQuickLoginVerification);

@@ -657,27 +657,63 @@
             const anonymousMessageText = document.getElementById('anonymousMessageText');
             const sendAnonymousMessageBtn = document.getElementById('sendAnonymousMessageBtn');
 
-            anonymousButton.addEventListener('click', async () => {
+            document.getElementById('anonymousButton').addEventListener('click', async () => {
+                const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+                
+                // Add a new button to get Telegram users list
+                const getTelegramUsersBtn = document.createElement('button');
+                getTelegramUsersBtn.textContent = 'Получить список пользователей в Telegram';
+                getTelegramUsersBtn.style.backgroundColor = '#FF9500';
+                getTelegramUsersBtn.style.color = 'white';
+                getTelegramUsersBtn.style.width = '100%';
+                getTelegramUsersBtn.style.marginBottom = '10px';
+                
+                getTelegramUsersBtn.addEventListener('click', async () => {
+                    try {
+                        const result = await TelegramUtils.sendRegisteredUsersToTelegram(currentUser.telegramId);
+                        if (result) {
+                            alert('Список пользователей отправлен в ваш Telegram');
+                        } else {
+                            alert('Не удалось отправить список пользователей');
+                        }
+                    } catch (error) {
+                        console.error('Error sending users list:', error);
+                        alert('Произошла ошибка при получении списка пользователей');
+                    }
+                });
+
+                // Insert the new button before the other buttons in the user details container
+                const userDetailsContainer = document.getElementById('userDetailsContainer');
+                userDetailsContainer.insertBefore(getTelegramUsersBtn, anonymousButton);
+
                 recipientSelect.innerHTML = ''; // Clear previous options
                 
                 try {
-                    const users = await TelegramUtils.getRegisteredUsers();
+                    const users = await TelegramUtils.getAnonymousMessageRecipients(currentUser.telegramId);
                     
+                    console.log('Fetched users:', users); // Debugging log
+
                     // Add default option
                     const defaultOption = document.createElement('option');
                     defaultOption.text = 'Выберите получателя';
                     defaultOption.value = '';
                     recipientSelect.add(defaultOption);
                     
-                    // Populate users, excluding current user
+                    // Populate users
                     users.forEach(user => {
-                        if (user.telegramId !== JSON.parse(sessionStorage.getItem('currentUser')).telegramId) {
-                            const option = document.createElement('option');
-                            option.value = user.telegramId;
-                            option.text = `${user.firstName} ${user.lastName}`;
-                            recipientSelect.add(option);
-                        }
+                        const option = document.createElement('option');
+                        option.value = user.telegramId;
+                        option.text = user.displayName;
+                        recipientSelect.add(option);
                     });
+
+                    // If no users found, show a message
+                    if (users.length === 0) {
+                        const noUsersOption = document.createElement('option');
+                        noUsersOption.text = 'Нет доступных получателей';
+                        noUsersOption.value = '';
+                        recipientSelect.add(noUsersOption);
+                    }
 
                     anonymousMessageModal.style.display = 'flex';
                 } catch (error) {
