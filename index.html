@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -106,8 +105,25 @@
             <h2 style="text-align: center; margin-bottom: 15px;">Login</h2>
             <p id="loginErrorMessage" class="error-message"></p>
             <input type="text" id="loginTelegramId" placeholder="Telegram ID" style="width: 100%; margin: 15px 0; text-align: center;">
+            
+            <!-- New quick login section -->
+            <div id="quickLoginSection" style="display: none;">
+                <p style="text-align: center; margin-bottom: 15px;">Quick Login</p>
+                <button id="quickLoginBtn" style="width: 100%; margin-bottom: 10px;">Send Verification Code</button>
+            </div>
+            
             <input type="password" id="loginPassword" placeholder="Password" style="width: 100%; margin: 15px 0; text-align: center;">
             <button id="submitLogin" style="width: 100%;">Login</button>
+        </div>
+    </div>
+
+    <!-- Quick Login Verification Modal -->
+    <div id="quickLoginVerificationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="text-align: center; margin-bottom: 15px;">Quick Login</h2>
+            <p style="text-align: center; margin-bottom: 15px;">Check your Telegram for the verification code</p>
+            <input type="text" id="quickLoginVerificationCode" placeholder="Enter verification code" style="width: 100%; margin: 15px 0; text-align: center;">
+            <button id="submitQuickLoginVerificationCode" style="width: 100%;">Verify</button>
         </div>
     </div>
 
@@ -145,7 +161,6 @@
     <script type="module">
         import * as TelegramUtils from 'telegram-utils';
         import * as UserManagement from 'user-management';
-        import * as Validation from 'validation';
 
         // Main event listeners
         document.getElementById('signupButton').addEventListener('click', UserManagement.handleSignupStart);
@@ -176,6 +191,11 @@
                 }
             });
         });
+
+        // New quick login event listeners
+        document.getElementById('loginTelegramId').addEventListener('input', UserManagement.checkQuickLoginAvailability);
+        document.getElementById('quickLoginBtn').addEventListener('click', UserManagement.sendQuickLoginVerificationCode);
+        document.getElementById('submitQuickLoginVerificationCode').addEventListener('click', UserManagement.handleQuickLoginVerification);
     </script>
 </body>
 </html>

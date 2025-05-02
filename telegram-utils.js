@@ -183,3 +183,35 @@ export async function getRegisteredUsers() {
         lastName: user.lastName
     }));
 }
+
+export async function getAllRegisteredUsers() {
+    // Retrieve registered users from localStorage
+    const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    return registeredUsers.map(user => ({
+        telegramId: user.telegramId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+    }));
+}
+
+export async function sendSiteChatMessage(sender, message) {
+    // Store messages in localStorage
+    const siteChats = JSON.parse(localStorage.getItem('siteChatMessages') || '[]');
+    
+    const chatMessage = {
+        sender: sender,
+        message: message,
+        timestamp: new Date().toISOString()
+    };
+
+    siteChats.push(chatMessage);
+    localStorage.setItem('siteChatMessages', JSON.stringify(siteChats));
+
+    return true;
+}
+
+export async function getSiteChatMessages() {
+    // Retrieve site chat messages from localStorage
+    return JSON.parse(localStorage.getItem('siteChatMessages') || '[]');
+}

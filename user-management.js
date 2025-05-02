@@ -3,19 +3,16 @@ import * as Validation from './validation.js';
 
 let currentVerificationCode = '';
 let currentUserData = null;
+let quickLoginTelegramId = '';
 
 export function saveRegisteredUser(userData) {
-    // Store registered users in localStorage
     let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
     
-    // Check if user already exists
     const existingUserIndex = registeredUsers.findIndex(user => user.telegramId === userData.telegramId);
     
     if (existingUserIndex !== -1) {
-        // Update existing user
         registeredUsers[existingUserIndex] = userData;
     } else {
-        // Add new user
         registeredUsers.push(userData);
     }
     
@@ -26,6 +23,65 @@ export function saveRegisteredUser(userData) {
 export function checkRegisteredUser(telegramId) {
     const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
     return registeredUsers.find(user => user.telegramId === telegramId);
+}
+
+export function checkQuickLoginAvailability() {
+    const loginTelegramId = document.getElementById('loginTelegramId').value;
+    const quickLoginSection = document.getElementById('quickLoginSection');
+    
+    const registeredUser = checkRegisteredUser(loginTelegramId);
+    
+    if (registeredUser) {
+        quickLoginSection.style.display = 'block';
+    } else {
+        quickLoginSection.style.display = 'none';
+    }
+}
+
+export async function sendQuickLoginVerificationCode() {
+    const loginTelegramId = document.getElementById('loginTelegramId').value;
+    const registeredUser = checkRegisteredUser(loginTelegramId);
+    
+    if (registeredUser) {
+        try {
+            currentVerificationCode = TelegramUtils.generateVerificationCode();
+            quickLoginTelegramId = loginTelegramId;
+            
+            const codeSent = await TelegramUtils.sendVerificationCode(loginTelegramId, currentVerificationCode);
+
+            if (codeSent) {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('quickLoginVerificationModal').style.display = 'flex';
+            } else {
+                alert('Не удалось отправить код подтверждения');
+            }
+        } catch (error) {
+            console.error('Error sending quick login verification code:', error);
+            alert('Произошла ошибка при отправке кода');
+        }
+    }
+}
+
+export async function handleQuickLoginVerification() {
+    const enteredCode = document.getElementById('quickLoginVerificationCode').value;
+
+    if (enteredCode === currentVerificationCode) {
+        const registeredUser = checkRegisteredUser(quickLoginTelegramId);
+        
+        if (registeredUser) {
+            sessionStorage.setItem('currentUser', JSON.stringify(registeredUser));
+            window.location.href = 'products.html';
+        } else {
+            alert('Пользователь не найден');
+        }
+        
+        // Reset quick login variables
+        currentVerificationCode = '';
+        quickLoginTelegramId = '';
+        document.getElementById('quickLoginVerificationModal').style.display = 'none';
+    } else {
+        alert('Неверный код подтверждения. Попробуйте снова.');
+    }
 }
 
 export function handleSignupStart() {

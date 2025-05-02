@@ -259,6 +259,65 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        #siteChatModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #siteChatModal .modal-content {
+            width: 90%;
+            max-width: 400px;
+            height: 70vh;
+            background: #1E1E1E;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #siteChatMessages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .site-chat-message {
+            background: #2C2C2C;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+        
+        .site-chat-message.sent {
+            align-self: flex-end;
+            background: #007AFF;
+            color: white;
+        }
+        
+        .site-chat-message.received {
+            align-self: flex-start;
+        }
+        
+        #siteChatInput {
+            display: flex;
+            padding: 10px;
+        }
+        
+        #siteChatInput input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
     </style>
     <script type="importmap">
     {
@@ -298,7 +357,7 @@
                 <h2>RML-2.0-Undetect</h2>
                 <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="200" height="200" rx="20" fill="#2C2C2C"/>
-                    <path d="M50 135H150V125H50V135ZM100 65C86.75 65 76 75.75 76 89C76 102.25 86.75 113 100 113C113.25 113 124 102.25 124 89C124 75.75 113.25 65 100 65ZM100 105.5C90.35 105.5 82.5 97.65 82.5 88C82.5 78.35 90.35 70.5 100 70.5C109.65 70.5 117.5 78.35 117.5 88C117.5 97.65 109.65 105.5 100 105.5ZM60 125H140C142.75 125 145 122.75 145 120V68C145 65.25 142.75 63 140 63H60C57.25 63 55 65.25 55 68V120C55 122.75 57.25 125 60 125Z" fill="white"/>
+                    <path d="M50 135H150V125H50V135ZM100 65C86.75 65 76 75.75 76 89C76 102.25 86.75 113 100 113C113.25 113 124 102.25 124 89C124 75.75 113.25 65 100 65ZM100 105.5C90.35 105.5 82.5 97.65 82.5 88C82.5 78.35 90.35 70.5 100 70.5C109.65 70.5 117.5 78.35 117.5 88C117.5 97.65 109.65 105.5 100 105.5ZM44 116.5H156V95C156 84.75 147.75 76.5 137.5 76.5H62.5C52.25 76.5 44 84.75 44 95V116.5ZM44 165V146.5C44 136.25 52.25 128 62.5 128H137.5C147.75 128 156 136.25 156 146.5V165C156 175.25 147.75 183.5 137.5 183.5H62.5C52.25 183.5 44 175.25 44 165Z" fill="white"/>
                 </svg>
                 <p>Месяц подписки с расширенными возможностями</p>
                 <div class="price">
@@ -362,6 +421,17 @@
             </select>
             <textarea id="anonymousMessageText" placeholder="Введите ваше анонимное сообщение..." rows="4"></textarea>
             <button id="sendAnonymousMessageBtn">Отправить анонимно</button>
+        </div>
+    </div>
+
+    <!-- Site Chat Modal -->
+    <div id="siteChatModal" class="modal">
+        <div class="modal-content">
+            <div id="siteChatMessages"></div>
+            <div id="siteChatInput">
+                <input type="text" id="chatMessageInput" placeholder="Введите сообщение...">
+                <button id="sendChatMessageBtn">Отправить</button>
+            </div>
         </div>
     </div>
     <div style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(0,0,0,0.7); color: rgba(255,255,255,0.5); text-align: center; padding: 10px; font-size: 10px; word-wrap: break-word; overflow-wrap: break-word;">
@@ -651,6 +721,77 @@
                     console.error('Error sending anonymous message:', error);
                     alert('Произошла ошибка при отправке сообщения!');
                 }
+            });
+
+            // Add site chat functionality
+            const siteChatsButton = document.createElement('button');
+            siteChatsButton.textContent = 'Общий чат';
+            siteChatsButton.style.backgroundColor = '#4CAF50';
+            siteChatsButton.style.marginTop = '10px';
+            siteChatsButton.style.width = '100%';
+            
+            // Insert the button next to the Anonymous Messages button
+            anonymousButton.parentNode.insertBefore(siteChatsButton, anonymousButton.nextSibling);
+
+            siteChatsButton.addEventListener('click', async () => {
+                const siteChatModal = document.getElementById('siteChatModal');
+                const siteChatMessages = document.getElementById('siteChatMessages');
+                const chatMessageInput = document.getElementById('chatMessageInput');
+                const sendChatMessageBtn = document.getElementById('sendChatMessageBtn');
+
+                // Load existing messages
+                siteChatMessages.innerHTML = ''; // Clear previous messages
+                const messages = await TelegramUtils.getSiteChatMessages();
+                
+                messages.forEach(msg => {
+                    const messageEl = document.createElement('div');
+                    messageEl.classList.add('site-chat-message');
+                    messageEl.classList.add(msg.sender.telegramId === JSON.parse(sessionStorage.getItem('currentUser')).telegramId ? 'sent' : 'received');
+                    messageEl.textContent = `${msg.sender.firstName}: ${msg.message}`;
+                    siteChatMessages.appendChild(messageEl);
+                });
+
+                // Scroll to bottom
+                siteChatMessages.scrollTop = siteChatMessages.scrollHeight;
+
+                siteChatModal.style.display = 'flex';
+
+                sendChatMessageBtn.onclick = async () => {
+                    const message = chatMessageInput.value.trim();
+                    if (message) {
+                        await TelegramUtils.sendSiteChatMessage(
+                            { 
+                                telegramId: JSON.parse(sessionStorage.getItem('currentUser')).telegramId, 
+                                firstName: JSON.parse(sessionStorage.getItem('currentUser')).firstName 
+                            }, 
+                            message
+                        );
+
+                        // Reload messages
+                        siteChatMessages.innerHTML = '';
+                        const updatedMessages = await TelegramUtils.getSiteChatMessages();
+                        
+                        updatedMessages.forEach(msg => {
+                            const messageEl = document.createElement('div');
+                            messageEl.classList.add('site-chat-message');
+                            messageEl.classList.add(msg.sender.telegramId === JSON.parse(sessionStorage.getItem('currentUser')).telegramId ? 'sent' : 'received');
+                            messageEl.textContent = `${msg.sender.firstName}: ${msg.message}`;
+                            siteChatMessages.appendChild(messageEl);
+                        });
+
+                        // Scroll to bottom
+                        siteChatMessages.scrollTop = siteChatMessages.scrollHeight;
+
+                        chatMessageInput.value = ''; // Clear input
+                    }
+                };
+
+                // Close modal functionality
+                siteChatModal.addEventListener('click', (event) => {
+                    if (event.target === siteChatModal) {
+                        siteChatModal.style.display = 'none';
+                    }
+                });
             });
         }
     </script>
