@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>@voltbank</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="bank-app fade-in">
+        <header>
+            <div class="profile">
+                <img src="https://cdn.leonardo.ai/users/44c567cc-75d2-45f0-9534-f4801d541b2f/generations/1b79a63a-34a7-4325-b587-be72c0d1aac9/segments/1:4:1/Flux_Dev_A_modern_sleek_logo_design_for_Volt_Bank_created_by_T_0.jpg" alt="Профиль" class="profile-avatar">
+                <div class="profile-info">
+                    <button id="loginButton" class="action-btn">Login with Telegram</button>
+                    <div id="profileDetails" style="display: none;">
+                        <h2 id="userName"></h2>
+                        <p>Личный счет</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Account View -->
+            <div id="account-view">
+                <div class="balance-card">
+                    <h3>Общий баланс</h3>
+                    <div class="balance">
+                        <span class="amount">0 ₽</span>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>Быстрые действия</h3>
+                    <div class="action-grid">
+                        <button class="action-btn">
+                            <i class="icon-transfer">➡️</i>
+                            <span>Перевод</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="icon-pay">💳</i>
+                            <span>Платежи</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="icon-deposit">💰</i>
+                            <span>Депозит</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="icon-history">📋</i>
+                            <span>История</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recent-transactions">
+                    <h3>Последние транзакции</h3>
+                    <p>Транзакции временно недоступны, банк находится на стадии разработки.</p>
+                </div>
+
+                <!-- Added Bank Info Block -->
+                <div class="bank-info-block info-block">
+                    <h3>О нас и @voltbank</h3>
+                    <p>@voltbank - это цифровой банк, для системы, VOLT, созданный командой PAO - TeamL, раздел криптобезопастности. Раздел специализируемся на защите данных пользователя шифрованием которые используются почти во всех современных криптовалютных биржах, а также самим @telegram.</p>
+                    <p>Наш банк предоставляет безопасные и удобные инструменты для управления вашими средствами, включая приватные карты и интеграцию с Telegram для легкого доступа.</p>
+                    <p>Все права защищены. ® ™ ₿ | 🛡️ Коммерческие знаки @voltbank.</p>
+                </div>
+                <!-- End Added Bank Info Block -->
+            </div>
+
+            <!-- Cards View -->
+            <div id="cards-view" class="content-view" style="display: none;">
+                <div class="info-block">
+                    <h3>Ваши Карты</h3>
+                    <p>У вас пока нет активных карт.</p>
+                    <button class="action-btn request-card-btn">Заказать Приватную Карту</button>
+                </div>
+                <div class="info-block">
+                    <h3>Доступные Карты</h3>
+                    <ul>
+                        <li>Приватная карта @voltbank, для пользователей</li>
+                        <li>Приватная карта @voltbank, для сотрудников</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- More View -->
+            <div id="more-view" class="content-view" style="display: none;">
+                <div class="info-block">
+                    <h3>Еще</h3>
+                    <button class="action-btn more-option-btn">Техподдержка</button>
+                    <button class="action-btn more-option-btn">Настройки</button>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-view="account-view">Счета</button>
+            <button class="nav-btn" data-view="cards-view">Карты</button>
+            <button class="nav-btn" data-view="more-view">Еще</button>
+        </nav>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
