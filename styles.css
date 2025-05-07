@@ -1,439 +1,232 @@
-body {
+/* Tombstone: Entire CSS previously in index.html now moved here */
+* {
     margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    transition: opacity 0.5s ease-out;
-    overflow: hidden;
-    position: relative;
-    padding: 0 10px;
+    padding: 0;
     box-sizing: border-box;
-    background-color: black;
-    /* Disable text selection */
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10+ */
-    user-select: none; /* Standard syntax */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    scrollbar-width: thin;
+    scrollbar-color: #007AFF rgba(255, 255, 255, 0.1);
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
-body.fade-out {
-    opacity: 0;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-body.fade-in {
-    animation: fadeIn 0.5s ease-in forwards;
-}
-
-.bank-app.fade-in {
-    animation: fadeIn 0.5s ease-in forwards;
-}
-
-.telegram-welcome {
-    text-align: center;
-    opacity: 0;
-    transform: scale(0.7);
-    animation: welcomeAnimation 1.5s ease-out forwards;
-    padding: 10px;
-}
-
-.logo {
-    width: 300px;
-    margin: 0 auto 10px;
+body {
+    background-color: #121212;
+    color: white;
+    min-height: 100vh;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-y: auto;
 }
 
-.logo img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-}
-
-.welcome-text h1 {
-    color: #333;
-    margin-bottom: 5px;
-    font-size: 1.2em;
-}
-
-.welcome-text p {
-    color: #666;
-    font-size: 0.8em;
-}
-
-@keyframes welcomeAnimation {
-    0% {
-        opacity: 0;
-        transform: scale(0.7);
-    }
-    60% {
-        opacity: 0.8;
-        transform: scale(1.05);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.bank-app {
-    max-width: 480px;
-    background-color: rgba(0, 0, 0, 0.95);
-    color: white;
-    height: 100vh;
+.phone {
+    width: 375px;
+    min-height: 812px;
+    max-height: 100vh;
+    background: #000;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 20px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 10px;
-    overflow: hidden;
 }
 
-header {
-    background-color: rgba(0, 0, 0, 0.95);
-    color: white;
-    padding: 20px;
-    position: relative;
-    z-index: 2;
-}
-
-.profile {
-    display: flex;
-    align-items: center;
-}
-
-.profile-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-}
-
-.profile-info {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-}
-
-#loginButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-    width: auto;
-}
-
-#loginButton:hover {
-    background-color: #0056b3;
-}
-
-#profileDetails h2 {
-    margin: 0;
-    font-size: 1.2em;
-    color: white;
-}
-
-#profileDetails p {
-    margin: 0;
-    font-size: 0.8em;
-    color: #ccc;
-}
-
-.bank-app main {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding-bottom: 80px;
-    position: relative;
-    z-index: 1;
-
-    /* Hide scrollbar for different browsers */
-    /* Firefox */
-    scrollbar-width: none;
-    /* IE and Edge */
-    -ms-overflow-style: none;
-}
-
-.bank-app main::-webkit-scrollbar {
-  display: none;
-}
-
-.bank-app main::before {
-    content: '';
+.notch {
+    width: 60%;
+    height: 30px;
+    background: #000;
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('https://images.hdqwalls.com/download/abstract-dark-purple-4k-uz-2932x2932.jpg');
-    background-size: cover;
-    background-position: center;
-    filter: blur(5px);
-    z-index: -1;
-    width: 100%;
-    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    z-index: 10;
 }
 
-/* Style for the content views within main */
-main > div {
-    position: relative; /* Ensure children respect z-index */
-    z-index: 2; /* Bring content above the blurred background */
-    padding: 0 15px; /* Add padding consistent with other blocks */
-    margin-top: 20px; /* Add space below the header */
-}
-
-.balance-card,
-.quick-actions,
-.recent-transactions,
-.info-block {
-    background-color: rgba(0, 0, 0, 0.8);
-    margin-bottom: 15px; /* Use margin-bottom for spacing */
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    color: white;
-}
-
-.balance-card {
-     text-align: center;
-}
-
-
-.balance .amount {
-    font-size: 2em;
-    font-weight: bold;
-    color: white;
-}
-
-.quick-actions .action-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
-
-.action-btn {
-    background-color: rgba(0, 0, 0, 0.8);
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Center vertically */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%; /* Ensure buttons take full grid space */
-    text-align: center; /* Center text if not flex-direction column */
-}
-
-.action-btn:hover:not(#loginButton):not(.nav-btn) {
-    background-color: rgba(255, 255, 255, 0.1); /* Subtle hover effect */
-}
-
-
-.action-btn i {
-    color: white;
-    font-size: 1.5em;
-    margin-bottom: 5px;
-}
-
-.recent-transactions ul {
-    list-style: none;
-    padding: 0;
-    margin: 0; /* Remove default margin */
-}
-
-.recent-transactions li {
+.status-bar {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
 }
 
-.recent-transactions li:last-child {
-    border-bottom: none; /* Remove border from last item */
+.time {
+    font-weight: 600;
 }
 
-.transaction-amount.income {
-    color: green;
-}
-
-.recent-transactions p {
-    color: #ccc; /* Make the text slightly lighter */
-    font-style: italic; /* Add italic style */
-    text-align: center; /* Center the text */
-    margin-top: 10px; /* Add some space above the text */
-    margin-bottom: 0; /* Remove bottom margin if it's the last element */
-}
-
-.info-block h3 {
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(100% - 80px);
     margin-top: 0;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #777;
+}
+
+.input-group label {
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    background: #1E1E1E;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+}
+
+.input-group input {
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+button {
+    background: #007AFF;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+    cursor: pointer;
+    animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+button:hover {
+    background: #0069D9;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #1E1E1E;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 300px;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+#errorModal {
+    display: none;
+}
+
+#verificationModal {
+    display: none;
+}
+
+#loginModal {
+    display: none;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
     margin-bottom: 10px;
 }
 
-.info-block p {
-    margin-bottom: 15px;
-    line-height: 1.5;
-    color: #ccc;
+.product {
+    animation: fadeInUp 0.7s ease-out;
+    animation-fill-mode: both;
 }
 
-.info-block ul {
-    list-style: disc;
-    padding-left: 20px;
-    margin-bottom: 15px;
+.product:nth-child(2) {
+    animation-delay: 0.2s;
 }
 
-.info-block li {
-    margin-bottom: 5px;
-    color: #ccc;
+.product:nth-child(3) {
+    animation-delay: 0.4s;
 }
 
-.request-card-btn, .more-option-btn {
-    margin-top: 10px;
-    width: auto; /* Allow button width to be determined by content */
-    padding: 10px 20px;
-    display: inline-flex; /* Use inline-flex for buttons within text flow */
-    flex-direction: row; /* Arrange icon and text side-by-side if applicable */
-    align-items: center;
-    justify-content: center;
+#welcomeMessage {
+    animation: fadeInUp 0.8s ease-out;
 }
 
-.request-card-btn {
-    background-color: #007bff; /* Use a distinct color for primary actions */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.request-card-btn:hover {
-     background-color: #0056b3;
-}
-
-.more-option-btn {
+::-webkit-scrollbar {
+    width: 8px;
     background-color: rgba(255, 255, 255, 0.1);
-    margin-right: 10px; /* Space between buttons */
-}
-.more-option-btn:last-child {
-    margin-right: 0;
+    border-radius: 10px;
 }
 
-/* Added style for the bank info block */
-.bank-info-block {
-    margin-top: 20px; /* Add a little space above the block */
-    font-size: 0.9em; /* Slightly smaller font for info text */
+::-webkit-scrollbar-thumb {
+    background-color: #007AFF;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
 }
 
-.bank-info-block p:last-child {
-    margin-bottom: 0; /* Remove bottom margin from the last paragraph */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #0056b3;
 }
 
-.bottom-nav {
-    display: flex;
-    background-color: rgba(0, 0, 0, 0.95);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    position: relative;
-    z-index: 2;
-}
-
-.nav-btn {
-    flex: 1;
-    padding: 15px 10px; /* Adjust padding for smaller screens */
-    background: none;
-    border: none;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    text-align: center;
-    transition: color 0.3s ease;
-}
-
-.nav-btn:hover {
-    color: #ffffff; /* Brighter white on hover */
-}
-
-.nav-btn.active {
-    color: #90CAF9; /* Active color */
-}
-
-.recent-transactions h3,
-.quick-actions h3,
-.balance-card h3,
-.info-block h3 {
-    color: white;
-    margin-top: 0; /* Ensure no top margin */
-    margin-bottom: 15px; /* Add space below headings */
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .action-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
-    }
-
-    .bank-app {
-        border-radius: 0; /* No rounded corners on mobile */
-         height: 100vh; /* Full viewport height */
-         width: 100vw; /* Full viewport width */
-         max-width: none; /* Remove max-width */
-    }
-
-    body {
-        padding: 0; /* Remove body padding */
-        align-items: stretch; /* Stretch to fill height */
-         justify-content: stretch; /* Stretch to fill width */
-    }
-
-    header, main, .bottom-nav {
-        padding: 0 15px; /* Add padding to sections instead of body */
-    }
-
-     main > div {
-         padding: 0; /* Remove padding from content views, blocks have internal padding */
-     }
-
-    .balance-card,
-    .quick-actions,
-    .recent-transactions,
-    .info-block {
-         margin-left: 0;
-         margin-right: 0;
-         border-radius: 0; /* No rounded corners on blocks */
-         padding: 15px; /* Slightly less padding */
-    }
-
-    .nav-btn {
-        padding: 15px 5px; /* Adjust padding */
-        font-size: 0.9em; /* Slightly smaller font */
-    }
-
-    .action-btn i {
-        font-size: 1.2em; /* Slightly smaller icons */
-    }
-
-    .balance .amount {
-        font-size: 1.8em; /* Slightly smaller balance font */
+@media screen and (max-width: 480px) {
+    .commercial-designations {
+        font-size: 8px;
+        padding: 5px;
+        line-height: 1.2;
     }
 }
 
-.bottom-nav {
-    position: absolute;
+.commercial-designations {
+    position: fixed;
     bottom: 0;
     left: 0;
-    right: 0;
     width: 100%;
+    background-color: rgba(0,0,0,0.7);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 10px;
+    font-size: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+    max-height: 20vh;
+    overflow-y: auto;
 }

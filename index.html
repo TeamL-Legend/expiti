@@ -1,22 +1,198 @@
-<!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Привет!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In Form</title>
     <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "telegram-utils": "./telegram-utils.js",
+            "user-management": "./user-management.js",
+            "validation": "./validation.js"
+        }
+    }
+    </script>
+    <style>
+        /* Add this to existing styles */
+        #updateModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #updateModal .modal-content {
+            background: #1E1E1E;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 350px;
+            text-align: center;
+            border: 2px solid #007AFF;
+            box-shadow: 0 10px 30px rgba(0,122,255,0.3);
+        }
+        #updateModal h2 {
+            color: #007AFF;
+            margin-bottom: 15px;
+        }
+        #updateModal p {
+            color: #999;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        #closeUpdateModal {
+            background-color: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body class="fade-in">
-    <div class="telegram-welcome">
-        <div class="logo">
-            <!-- Заменено SVG на img -->
-            <img src="https://cdn.leonardo.ai/users/44c567cc-75d2-45f0-9534-f4801d541b2f/generations/1b79a63a-34a7-4325-b587-be72c0d1aac9/segments/1:4:1/Flux_Dev_A_modern_sleek_logo_design_for_Volt_Bank_created_by_T_0.jpg" alt="Логотип">
+<body>
+    <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar">
         </div>
-        <div class="welcome-text">
-            <h1>@voltbank</h1>
-            <p>PAO - TeamL - cryptosecurity</p>
+        
+        <div class="form-container">
+            <h1>Привет!</h1>
+            
+            <div class="input-group">
+                <label for="email">@username</label>
+                <input type="email" id="email" placeholder="@username">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">create password</label>
+                <input type="password" id="password" placeholder="••••••••••">
+            </div>
+            
+            <div class="input-group">
+                <label for="firstName">Имя</label>
+                <input type="text" id="firstName">
+            </div>
+            
+            <div class="input-group">
+                <label for="lastName">Фамилия</label>
+                <input type="text" id="lastName">
+            </div>
+            
+            <button id="signupButton">Sign Up</button>
+            
+            <button id="switchToLoginButton" style="background-color: #4CAF50; margin-top: 10px;">Already registered? Login</button>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <!-- Telegram ID Modal -->
+    <div id="telegramModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="margin-left: 20%;">Введите TGID</h2>
+            <input type="text" id="telegramId" placeholder="1234567890" style="width: 100%; margin: 15px 0px 5px 0px; text-align: center;">
+            <button id="submitTelegram" style="width: 100%;">Done</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="text-align: center; margin-bottom: 15px;">Login</h2>
+            <p id="loginErrorMessage" class="error-message"></p>
+            <input type="text" id="loginTelegramId" placeholder="Telegram ID" style="width: 100%; margin: 15px 0; text-align: center;">
+            
+            <!-- New quick login section -->
+            <div id="quickLoginSection" style="display: none;">
+                <p style="text-align: center; margin-bottom: 15px;">Quick Login</p>
+                <button id="quickLoginBtn" style="width: 100%; margin-bottom: 10px;">Send Verification Code</button>
+            </div>
+            
+            <input type="password" id="loginPassword" placeholder="Password" style="width: 100%; margin: 15px 0; text-align: center;">
+            <button id="submitLogin" style="width: 100%;">Login</button>
+        </div>
+    </div>
+
+    <!-- Quick Login Verification Modal -->
+    <div id="quickLoginVerificationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="text-align: center; margin-bottom: 15px;">Quick Login</h2>
+            <p style="text-align: center; margin-bottom: 15px;">Check your Telegram for the verification code</p>
+            <input type="text" id="quickLoginVerificationCode" placeholder="Enter verification code" style="width: 100%; margin: 15px 0; text-align: center;">
+            <button id="submitQuickLoginVerificationCode" style="width: 100%;">Verify</button>
+        </div>
+    </div>
+
+    <!-- Verification Code Modal -->
+    <div id="verificationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 style="text-align: center; margin-bottom: 15px;">Verification Code</h2>
+            <p style="text-align: center; margin-bottom: 15px;">Check your Telegram for the code</p>
+            <input type="text" id="verificationCode" placeholder="Enter verification code" style="width: 100%; margin: 15px 0; text-align: center;">
+            <button id="submitVerificationCode" style="width: 100%;">Verify</button>
+        </div>
+    </div>
+
+    <!-- Update Notification Modal -->
+    <div id="updateModal">
+        <div class="modal-content">
+            <h2>Важное обновление!</h2><br><hr><br>
+            <p>Сброшены регистрации в связи с подключением нового протокола безопастности, необходимо повторить регистрацию.<hr><br>
+            Теперь вы можете отправлять анонимные сообщения другим пользователям
+            платформы напрямую через личный кабинет, после Login.</p><hr><br>
+          <p>Анонс: Мы начали разработку @voltbank_bot, название говорит само за себя.</p>
+            <button id="closeUpdateModal">Понятно</button>
+        </div>
+    </div>
+
+    <!-- Commercial Designations -->
+    <div style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(0,0,0,0.7); color: rgba(255,255,255,0.5); text-align: center; padding: 10px; font-size: 10px; word-wrap: break-word; overflow-wrap: break-word;">
+        &copy; 2025 ООО "TeamL-Technology" | CEO: @realkarmakun | М.Д.Д | INVEST: Russia Federation 
+        | Юр. адрес: Perm, г. Perm, ул. Lenina
+        | Расчетный счет: @voltceo в ПАО "@voltbank_bot" 
+        | БИК: 044525225 | Supported: @telegram 
+        | Все права защищены | @volt_privacypolicy_bot |
+    </div>
+
+    <script type="module">
+        import * as TelegramUtils from 'telegram-utils';
+        import * as UserManagement from 'user-management';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await TelegramUtils.initializeGlobalStorage();
+
+            const updateModal = document.getElementById('updateModal');
+            const closeUpdateModalBtn = document.getElementById('closeUpdateModal');
+
+            updateModal.style.display = 'flex';
+
+            closeUpdateModalBtn.addEventListener('click', () => {
+                updateModal.style.display = 'none';
+            });
+
+            updateModal.addEventListener('click', (event) => {
+                if (event.target === updateModal) {
+                    updateModal.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('signupButton').addEventListener('click', UserManagement.handleSignupStart);
+        document.getElementById('submitTelegram').addEventListener('click', UserManagement.handleTelegramSubmit);
+        document.getElementById('submitVerificationCode').addEventListener('click', UserManagement.handleVerificationSubmit);
+        document.getElementById('submitLogin').addEventListener('click', UserManagement.handleLogin);
+
+        document.getElementById('switchToLoginButton').addEventListener('click', () => {
+            document.getElementById('loginModal').style.display = 'flex';
+        });
+
+        document.getElementById('loginTelegramId').addEventListener('input', UserManagement.checkQuickLoginAvailability);
+        document.getElementById('quickLoginBtn').addEventListener('click', UserManagement.sendQuickLoginVerificationCode);
+        document.getElementById('submitQuickLoginVerificationCode').addEventListener('click', UserManagement.handleQuickLoginVerification);
+    </script>
 </body>
 </html>
-
